@@ -1,0 +1,112 @@
+package io.cui.test.juli;
+
+import static io.cui.tools.string.MoreStrings.isEmpty;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+
+import lombok.experimental.UtilityClass;
+
+/**
+ * Central entry point for handling {@link TestLogHandler}
+ *
+ *
+ * @author Oliver Wolff
+ *
+ */
+@UtilityClass
+public class TestLoggerFactory {
+
+    private static final StaticLoggerConfigurator configuration = new StaticLoggerConfigurator();
+
+    private static final ConsoleHandlerModifier CONSOLE_HANDLER = new ConsoleHandlerModifier();
+
+    /**
+     * Adds a {@link TestLogHandler} instance to jul's root logger. This method is reentrant, it
+     * ensures the {@link TestLogHandler} is installed only once
+     */
+    public static void install() {
+        if (getTestHandlerOption().isEmpty()) {
+            CONSOLE_HANDLER.saveLevel();
+            getRootLogger().addHandler(new TestLogHandler());
+        }
+    }
+
+    /**
+     * Removes previously installed {@link TestLogHandler} instance and restores the previously
+     * stored {@link ConsoleHandler#getLevel()}. See also
+     * {@link #install()}.
+     */
+    public static void uninstall() {
+        CONSOLE_HANDLER.restoreLevel();
+        Optional<TestLogHandler> testHandlerOption = getTestHandlerOption();
+        testHandlerOption.ifPresent(testLogHandler -> getRootLogger().removeHandler(testLogHandler));
+    }
+
+    /**
+     * Configures the logger sub-system according to the configuration found within
+     * {@link System#getProperties()} and / or the file "cui_logger.properties" usually located
+     * directly in "src/test/resources".
+     */
+    public static void configureLogger() {
+        // Set Root logger
+        TestLogLevel rootLevel = configuration.getRootLevel();
+        rootLevel.setAsRootLevel();
+        CONSOLE_HANDLER.adjustLevel(rootLevel);
+        // Set concrete logger
+        for (Entry<String, TestLogLevel> entry : configuration.getConfiguredLogger().entrySet()) {
+            entry.getValue().addLogger(entry.getKey());
+        }
+    }
+
+    private static Logger getRootLogger() {
+        return LogManager.getLogManager().getLogger("");
+    }
+
+    private static List<Handler> getHandler() {
+        return Arrays.asList(getRootLogger().getHandlers());
+    }
+
+    /**
+     * @return the configured {@link TestLogHandler}
+     * @throws AssertionError in case no {@link TestLogHandler} could be found. This is usually the
+     *             case if {@link #install()} was not called prior to this request
+     */
+    public static TestLogHandler getTestHandler() {
+        return getTestHandlerOption().orElseThrow(
+                () -> new AssertionError("Unable to access io.cui.test.juli.TestLogHandler. Used properly?"));
+    }
+
+    /**
+     * @return the configured {@link TestLogHandler} if present
+     */
+    public static Optional<TestLogHandler> getTestHandlerOption() {
+        for (Handler handler : getHandler()) {
+            if (handler instanceof TestLogHandler) {
+                return Optional.of((TestLogHandler) handler);
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Convenient method for setting a Log-Level in context of the given {@link TestLogLevel}
+     *
+     * @param logLevel to be set
+     * @param loggerName if it is {@code null} or empty it will set the root-logger for the actual
+     *            Log-Level
+     */
+    public static void addLogger(TestLogLevel logLevel, String loggerName) {
+        CONSOLE_HANDLER.adjustLevel(logLevel);
+        if (isEmpty(loggerName)) {
+            Logger.getLogger("").setLevel(logLevel.getJuliLevel());
+        }
+        Logger.getLogger(loggerName).setLevel(logLevel.getJuliLevel());
+    }
+}

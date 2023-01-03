@@ -1,0 +1,242 @@
+package io.cui.test.juli;
+
+import static io.cui.tools.string.MoreStrings.isEmpty;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.stream.Collectors;
+
+import lombok.Getter;
+
+/**
+ * Handler for storing and querying {@link LogRecord}s
+ *
+ * @author Oliver Wolff
+ *
+ */
+public class TestLogHandler extends Handler {
+
+    private static final String TEST_LOG_LEVEL_MUST_NOT_BE_NULL = "TestLogLevel must not be null";
+
+    private static final String LOGGER_MUST_NOT_BE_NULL = "Logger must not be null";
+
+    private static final String MESSAGE_MUST_NOT_BE_NULL = "Message must not be null";
+
+    private static final String THROWABLE_CLASS_MUST_NOT_BE_NULL = "ThrowableClass must not be null";
+
+    private static final String THROWABLE_MUST_NOT_BE_NULL = "Throwable must not be null";
+
+    @Getter
+    private final List<LogRecord> records = Collections.synchronizedList(new ArrayList<>());
+
+    @Override
+    public void publish(LogRecord record) {
+        // Silently ignore null records.
+        if (record == null) {
+            return;
+        }
+        records.add(record);
+
+    }
+
+    @Override
+    public void close() {
+        // There is no need to close
+    }
+
+    @Override
+    public void flush() {
+        // There is no need to flush
+    }
+
+    /**
+     * @param level to be checked for message, must not be null
+     * @param message to be checked, must not be null
+     * @param throwableClass to be checked, must not be null
+     * @return a {@link List} of found {@link LogRecord}s
+     */
+    public List<LogRecord> resolveLogMessages(TestLogLevel level, String message,
+            Class<? extends Throwable> throwableClass) {
+        assertNotNull(throwableClass, THROWABLE_CLASS_MUST_NOT_BE_NULL);
+        return resolveLogMessages(level, message).stream()
+            .filter(r -> logRecordContains(r, throwableClass))
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * @param level to be checked for message, must not be null
+     * @param message to be checked, must not be null
+     * @param throwable to be checked, must not be null
+     * @return a {@link List} of found {@link LogRecord}s
+     */
+    public List<LogRecord> resolveLogMessages(TestLogLevel level, String message, Throwable throwable) {
+        assertNotNull(throwable, THROWABLE_MUST_NOT_BE_NULL);
+        return resolveLogMessages(level, message).stream()
+            .filter(r -> logRecordContains(r, throwable))
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * @param level to be checked for message, must not be null
+     * @param message to be checked, must not be null
+     * @return a {@link List} of found {@link LogRecord}s
+     */
+    public List<LogRecord> resolveLogMessages(TestLogLevel level, String message) {
+        assertNotNull(message, MESSAGE_MUST_NOT_BE_NULL);
+        return resolveLogMessages(level).stream().filter(r -> message.equals(r.getMessage()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * @param logger to be checked, must not be null
+     * @return a {@link List} of found {@link LogRecord}s
+     */
+    public List<LogRecord> resolveLogMessagesForLogger(String logger) {
+        assertFalse(isEmpty(logger), LOGGER_MUST_NOT_BE_NULL);
+        return records.stream()
+            .filter(r -> logger.equalsIgnoreCase(r.getLoggerName()))
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * @param level to be checked for message, must not be null
+     * @param logger to be checked, must not be null
+     * @return a {@link List} of found {@link LogRecord}s
+     */
+    public List<LogRecord> resolveLogMessagesForLogger(TestLogLevel level, String logger) {
+        assertNotNull(level, TEST_LOG_LEVEL_MUST_NOT_BE_NULL);
+        return resolveLogMessagesForLogger(logger).stream()
+            .filter(r -> level.getJuliLevel().equals(r.getLevel()))
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * @param level to be checked for message, must not be null
+     * @param logger to be checked, must not be null
+     * @return a {@link List} of found {@link LogRecord}s
+     */
+    public List<LogRecord> resolveLogMessagesForLogger(TestLogLevel level, Class<?> logger) {
+        assertNotNull(level, TEST_LOG_LEVEL_MUST_NOT_BE_NULL);
+        assertNotNull(logger, LOGGER_MUST_NOT_BE_NULL);
+        return resolveLogMessagesForLogger(level, logger.getName());
+    }
+
+    /**
+     * @param logger to be checked, must not be null
+     * @return a {@link List} of found {@link LogRecord}s
+     */
+    public List<LogRecord> resolveLogMessagesForLogger(Class<?> logger) {
+        assertNotNull(logger, LOGGER_MUST_NOT_BE_NULL);
+        return resolveLogMessagesForLogger(logger.getName());
+    }
+
+    /**
+     * @param level to be checked for message, must not be null
+     * @param messagePart to be checked, must not be null. Compared to
+     *            {@link TestLogHandler#resolveLogMessages(TestLogLevel, String)} this method check
+     *            whether the given text is contained within a {@link LogRecord}
+     * @return a {@link List} of found {@link LogRecord}s
+     */
+    public List<LogRecord> resolveLogMessagesContaining(TestLogLevel level, String messagePart) {
+        assertNotNull(messagePart, MESSAGE_MUST_NOT_BE_NULL);
+        return resolveLogMessages(level).stream()
+                .filter(r -> logRecordContains(r, messagePart))
+                .collect(Collectors.toList());
+    }
+
+    public List<LogRecord> resolveLogMessagesContaining(TestLogLevel level,
+                                                        String messagePart,
+                                                        Throwable throwable) {
+        assertNotNull(throwable, THROWABLE_MUST_NOT_BE_NULL);
+        return resolveLogMessagesContaining(level, messagePart).stream()
+            .filter(r -> logRecordContains(r, throwable))
+            .collect(Collectors.toList());
+    }
+
+    public List<LogRecord> resolveLogMessagesContaining(TestLogLevel level,
+                                                        String messagePart,
+                                                        Class<? extends Throwable> throwableClass) {
+        assertNotNull(throwableClass, THROWABLE_CLASS_MUST_NOT_BE_NULL);
+        return resolveLogMessagesContaining(level, messagePart).stream()
+            .filter(r -> logRecordContains(r, throwableClass))
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * @param level to be checked for message, must not be null
+     * @return a {@link List} of found {@link LogRecord}s
+     */
+    public List<LogRecord> resolveLogMessages(TestLogLevel level) {
+        assertNotNull(level, TEST_LOG_LEVEL_MUST_NOT_BE_NULL);
+        synchronized (records) {
+            return records.stream()
+                .filter(r -> logRecordContains(r, level))
+                .collect(Collectors.toList());
+        }
+    }
+
+    /**
+     * Clears the contained records
+     */
+    public void clearRecords() {
+        records.clear();
+    }
+
+    private static boolean logRecordContains(LogRecord logRecord, String messagePart) {
+        final String msg = logRecord.getMessage();
+        return null != msg && msg.contains(messagePart);
+    }
+
+    private static boolean logRecordContains(LogRecord logRecord, Class<? extends Throwable> throwableClass) {
+        Throwable thrown = logRecord.getThrown();
+        return null != thrown
+            && thrown.getClass().equals(throwableClass);
+    }
+
+    private static boolean logRecordContains(LogRecord logRecord, Throwable throwable) {
+        Throwable thrown = logRecord.getThrown();
+        return null != thrown
+            && thrown.equals(throwable);
+    }
+
+    private static boolean logRecordContains(LogRecord logRecord, TestLogLevel level) {
+        Level loggedLevel = logRecord.getLevel();
+        return null != loggedLevel
+            && loggedLevel.equals(level.getJuliLevel());
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getName() + " with " + getRecords().size() + " entries";
+    }
+
+    /**
+     * @return String representation of the records within this handler.
+     */
+    public String getRecordsAsString() {
+        if (records.isEmpty()) {
+            return "No log messages available";
+        }
+        List<LogRecord> all = new ArrayList<>(records);
+
+        all.sort(Comparator.comparing(l -> l.getLevel().intValue()));
+
+        List<String> elements = new ArrayList<>();
+
+        all.forEach(
+                l -> elements.add(TestLogLevel.parse(l.getLevel()) + ": " + l.getLoggerName() + "-" + l.getMessage()));
+        StringBuilder builder = new StringBuilder();
+        builder.append("Available Messages:");
+        for (String element : elements) {
+            builder.append("\n").append(element);
+        }
+        return builder.toString();
+    }
+}

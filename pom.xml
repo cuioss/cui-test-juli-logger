@@ -29,6 +29,15 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.cuioss</groupId>
+            <artifactId>cui-java-tools</artifactId>
+        </dependency>
         <!-- Unit testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

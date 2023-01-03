@@ -1,3 +1,61 @@
 == About
 
 Provides some classes simplifying the configuration and asserting of logging in the context of unit-tests 
+
+== How To use it
+
+Enable for a unit-test
+
+[source,java]
+----
+@EnableTestLogger
+class PortalHealthServletTest {}
+----
+
+Configure for all tests
+
+[source,java]
+----
+@EnableTestLogger(rootLevel = TestLogLevel.INFO, trace = List.class, error = Set.class)
+class PortalHealthServletTest {}
+----
+
+The logger and level are rested for each test
+
+Asserting log statements: written or not:
+
+[source,java]
+----
+@EnableTestLogger
+class PortalHealthServletTest {
+
+    @Test
+    void shouldAssertLogs() {
+        LogAsserts.assertLogMessagePresent(TestLogLevel.DEBUG, "Should be there at least once");
+        LogAsserts.assertSingleLogMessagePresent(TestLogLevel.INFO, "Should be there exactly once");
+        LogAsserts.assertLogMessagePresentContaining(TestLogLevel.INFO, "part of the expected message");
+        LogAsserts.assertNoLogMessagePresent(TestLogLevel.WARN, PortalHealthServlet.class);
+        // and many more asserts
+    }
+----
+
+Changing LogLevel dynamically:
+
+[source,java]
+----
+    TestLogLevel.DEBUG.addLogger(PortalHealthServlet.class);
+    // Set Root-level to debug
+    TestLogLevel.DEBUG.setAsRootLevel();
+----
+
+Advanced Usage:
+
+[source,java]
+----
+    // Programmatic Setup and teardown, usually done by EnableTestLogger / TestLoggerController
+   TestLoggerFactory.install();
+   TestLoggerFactory.uninstall();
+   
+   // Access the TestLogHandler (for advanced queries not covered by LogAsserts)
+   TestLoggerFactory.getTestHandler();
+----

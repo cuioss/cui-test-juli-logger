@@ -12,63 +12,72 @@ https://cuioss.github.io/cui-test-juli-logger/index.html[Generated Documentation
 
 == What is it?
 
-This is a template repository for creating java-modules for cui-open-source-projects. This incorporates all necessary java-structures, including `pom.xml`, sensible project-documentation, 
-an predefined github pipelines. 
-
-It is meant to be used as copy-paste-template.
+Provides some classes simplifying the configuration and asserting of logging in the context of unit-tests.
 
 === Maven Coordinates
 
 [source,xml]
 ----
     <dependency>
-        <groupId>io.github.cuioss</groupId>
+        <groupId>io.github.cuioss.test</groupId>
         <name>cui-test-juli-logger</name>
     </dependency>
 ----
 
-== Customization
+== How To use it
 
-=== Names / Keys
+Enable for a unit-test
 
-Create a new Repository by clicking "Use this template"
-Replace all  of `cui-test-juli-logger` with the new project 'key' / name, e.g. `my-java-module`. Relevant Files are:
+[source,java]
+----
+@EnableTestLogger
+class PortalHealthServletTest {}
+----
 
-[CAUTION]
-====
-The key must *not* contain spaces. They are used for creating urls as well.
+Configure for all tests
 
-====
+[source,java]
+----
+@EnableTestLogger(rootLevel = TestLogLevel.INFO, trace = List.class, error = Set.class)
+class PortalHealthServletTest {}
+----
 
+The logger and level are rested for each test
 
-* `README.adoc` -> the badges on top
-* `pom.xml`
-* `SECURITY.adoc`
-* `.github/project.yml`
-* `src/site/site.xml`
-* `src/site/asciidoc/about.adoc`
+Asserting log statements: written or not:
 
-=== Credentials
+[source,java]
+----
+@EnableTestLogger
+class PortalHealthServletTest {
 
-Add the necessary credentials to the project: "Settings" -> "Secrets" -> "Actions", as there are: 
+    @Test
+    void shouldAssertLogs() {
+        LogAsserts.assertLogMessagePresent(TestLogLevel.DEBUG, "Should be there at least once");
+        LogAsserts.assertSingleLogMessagePresent(TestLogLevel.INFO, "Should be there exactly once");
+        LogAsserts.assertLogMessagePresentContaining(TestLogLevel.INFO, "part of the expected message");
+        LogAsserts.assertNoLogMessagePresent(TestLogLevel.WARN, PortalHealthServlet.class);
+        // and many more asserts
+    }
+----
 
-* `GPG_PASSPHRASE` -> Code Signing
-* `GPG_PRIVATE_KEY` -> Code Signing
-* `OSS_SONATYPE_PASSWORD` -> Deploy to maven-central 
-* `OSS_SONATYPE_USERNAME` -> Deploy to maven-central
-* `PAGES_DEPLOY_TOKEN` -> Deploying the result of maven site to https://cuioss.github.io
-* `SONAR_TOKEN` -> Sonar-Cloud
+Changing LogLevel dynamically:
 
-They are picked up in the predefined pipeline-configurations:
+[source,java]
+----
+    TestLogLevel.DEBUG.addLogger(PortalHealthServlet.class);
+    // Set Root-level to debug
+    TestLogLevel.DEBUG.setAsRootLevel();
+----
 
-* `.github/workflows/maven.yml`
-* `.github/workflows/maven-release.yml`
+Advanced Usage:
 
-Documentation on how to create a signing key can be found https://github.com/cuioss/cui-parent-pom/blob/master/doc/signing_key.adoc[Documentation at cui-parent-pom] 
-
-A sonar token can be derived from https://sonarcloud.io/account/security
-
-=== Further Steps
-
-* Review / Enable the elements under 'Security' Tab
-* Add (link) the resulting maven-documentation: https://github.com/cuioss/cuioss.github.io/edit/main/README.md[github.io-documentation] 
+[source,java]
+----
+    // Programmatic Setup and teardown, usually done by EnableTestLogger / TestLoggerController
+   TestLoggerFactory.install();
+   TestLoggerFactory.uninstall();
+   
+   // Access the TestLogHandler (for advanced queries not covered by LogAsserts)
+   TestLoggerFactory.getTestHandler();
+----
