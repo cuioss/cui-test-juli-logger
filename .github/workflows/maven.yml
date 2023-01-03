@@ -17,7 +17,6 @@ on:
     branches: [ "master" ]
     paths-ignore:
       - 'README*'
-  workflow_dispatch:
   
 jobs:
   build:
