@@ -7,20 +7,21 @@
         <version>0.0.7</version>
         <relativePath />
     </parent>
-    <artifactId>cui-java-module-template</artifactId>
+    <groupId>io.github.cuioss.test</groupId>
+    <artifactId>cui-test-juli-logger</artifactId>
     <name>cui java module template</name>
     <version>1.0.0-SNAPSHOT</version>
-    <description>Template module for cuioss open source projects.
+    <description>Provides some classes simplifying the configuration and asserting of logging in the context of unit-tests 
     </description>
-    <url>https://github.com/cuioss/cui-java-module-template/</url>
+    <url>https://github.com/cuioss/cui-test-juli-logger/</url>
     <scm>
-        <url>https://github.com/cuioss/cui-java-module-template/</url>
-        <connection>scm:git:https://github.com/cuioss/cui-java-module-template.git</connection>
-        <developerConnection>scm:git:https://github.com/cuioss/cui-java-module-template/</developerConnection>
+        <url>https://github.com/cuioss/cui-test-juli-logger/</url>
+        <connection>scm:git:https://github.com/cuioss/cui-test-juli-logger.git</connection>
+        <developerConnection>scm:git:https://github.com/cuioss/cui-test-juli-logger/</developerConnection>
         <tag>HEAD</tag>
     </scm>
     <issueManagement>
-        <url>https://github.com/cuioss/cui-java-module-template/issues</url>
+        <url>https://github.com/cuioss/cui-test-juli-logger/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
     <dependencies>

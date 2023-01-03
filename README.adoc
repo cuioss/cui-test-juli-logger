@@ -1,14 +1,14 @@
-= cui-java-module-template
+= cui-test-juli-logger
 
 == Status
 
-https://sonarcloud.io/summary/new_code?id=cuioss_cui-java-module-template[image:https://sonarcloud.io/api/project_badges/measure?project=cuioss_cui-java-module-template&metric=alert_status[Quality
+https://sonarcloud.io/summary/new_code?id=cuioss_cui-test-juli-logger[image:https://sonarcloud.io/api/project_badges/measure?project=cuioss_cui-test-juli-logger&metric=alert_status[Quality
 Gate Status]]
-image:https://github.com/cuioss/cui-java-module-template/actions/workflows/maven.yml/badge.svg[Java CI with Maven,link=https://github.com/cuioss/cui-java-module-template/actions/workflows/maven.yml]
+image:https://github.com/cuioss/cui-test-juli-logger/actions/workflows/maven.yml/badge.svg[Java CI with Maven,link=https://github.com/cuioss/cui-test-juli-logger/actions/workflows/maven.yml]
 image:http://img.shields.io/:license-apache-blue.svg[License,link=http://www.apache.org/licenses/LICENSE-2.0.html]
-image:https://maven-badges.herokuapp.com/maven-central/io.github.cuioss/cui-java-module-template/badge.svg[Maven Central,link=https://maven-badges.herokuapp.com/maven-central/io.github.cuioss/cui-java-module-template]
+image:https://maven-badges.herokuapp.com/maven-central/io.github.cuioss/cui-test-juli-logger/badge.svg[Maven Central,link=https://maven-badges.herokuapp.com/maven-central/io.github.cuioss/cui-test-juli-logger]
 
-https://cuioss.github.io/cui-java-module-template/index.html[Generated Documentation on github-pages]
+https://cuioss.github.io/cui-test-juli-logger/index.html[Generated Documentation on github-pages]
 
 == What is it?
 
@@ -23,7 +23,7 @@ It is meant to be used as copy-paste-template.
 ----
     <dependency>
         <groupId>io.github.cuioss</groupId>
-        <name>cui-java-module-template</name>
+        <name>cui-test-juli-logger</name>
     </dependency>
 ----
 
@@ -32,7 +32,7 @@ It is meant to be used as copy-paste-template.
 === Names / Keys
 
 Create a new Repository by clicking "Use this template"
-Replace all  of `cui-java-module-template` with the new project 'key' / name, e.g. `my-java-module`. Relevant Files are:
+Replace all  of `cui-test-juli-logger` with the new project 'key' / name, e.g. `my-java-module`. Relevant Files are:
 
 [CAUTION]
 ====

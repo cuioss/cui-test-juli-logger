@@ -1,3 +1,3 @@
 == About
 
-Some information about this project
+Provides some classes simplifying the configuration and asserting of logging in the context of unit-tests 
