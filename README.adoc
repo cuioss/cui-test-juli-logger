@@ -10,7 +10,7 @@ image:https://maven-badges.herokuapp.com/maven-central/io.github.cuioss/cui-test
 
 https://cuioss.github.io/cui-test-juli-logger/index.html[Generated Documentation on github-pages]
 
-== What is it?
+== What is it? 
 
 Provides some classes simplifying the configuration and asserting of logging in the context of unit-tests.
 
