@@ -30,7 +30,7 @@ jobs:
     - name: Build with Java ${{ matrix.java.version }} (temurin)
       uses: actions/setup-java@v3
       with:
-        java-version: ${{matrix.java.version}}
+        java-version: ${{matrix.version}}
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven, Java ${{ matrix.version }}
