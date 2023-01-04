@@ -22,7 +22,7 @@ import io.cui.tools.reflect.MoreReflection;
 public class TestLoggerController implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback {
 
     @Override
-    public void beforeEach(ExtensionContext context) throws Exception {
+    public void beforeEach(ExtensionContext context) {
         TestLoggerFactory.configureLogger();
         TestLoggerFactory.getTestHandler().clearRecords();
         Class<?> testClass = context.getTestClass()
@@ -33,12 +33,12 @@ public class TestLoggerController implements BeforeAllCallback, AfterAllCallback
     }
 
     @Override
-    public void afterAll(ExtensionContext context) throws Exception {
+    public void afterAll(ExtensionContext context) {
         TestLoggerFactory.uninstall();
     }
 
     @Override
-    public void beforeAll(ExtensionContext context) throws Exception {
+    public void beforeAll(ExtensionContext context) {
         TestLoggerFactory.install();
     }
 
