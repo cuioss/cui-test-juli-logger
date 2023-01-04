@@ -84,7 +84,7 @@ class LogAssertsTest {
 
         assertSingleLogMessagePresent(DEBUG, MESSAGE, runtimeException.getClass());
 
-        assertThrows(AssertionError.class, () -> assertSingleLogMessagePresent(DEBUG, MESSAGE, illegalArgumentException.getClass()));
+        assertThrows(AssertionError.class, () -> assertSingleLogMessagePresent(DEBUG, MESSAGE, IllegalArgumentException.class));
     }
 
     @Test

@@ -1,5 +1,6 @@
 package io.cui.test.juli;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -95,8 +96,8 @@ class TestLogHandlerTest {
 
     @Test
     void shouldHandleCloseAndFlush() {
-        underTest.flush();
-        underTest.close();
+        assertDoesNotThrow(() -> underTest.flush());
+        assertDoesNotThrow(() -> underTest.close());
     }
 
     @Test

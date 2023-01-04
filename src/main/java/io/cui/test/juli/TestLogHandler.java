@@ -37,12 +37,12 @@ public class TestLogHandler extends Handler {
     private final List<LogRecord> records = Collections.synchronizedList(new ArrayList<>());
 
     @Override
-    public void publish(LogRecord record) {
+    public void publish(LogRecord logRecord) {
         // Silently ignore null records.
-        if (record == null) {
+        if (logRecord == null) {
             return;
         }
-        records.add(record);
+        records.add(logRecord);
 
     }
 

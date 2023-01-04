@@ -3,6 +3,7 @@ package io.cui.test.juli;
 import static io.cui.tools.string.MoreStrings.isEmpty;
 import static java.util.Objects.requireNonNull;
 
+import java.util.EnumSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -111,10 +112,8 @@ public enum TestLogLevel {
         try {
             return TestLogLevel.valueOf(levelAsAString.toUpperCase());
         } catch (IllegalArgumentException e) {
-            Logger.getLogger(TestLogLevel.class.getName()).log(Level.FINE,
-                    "Unable to determine logger, expected one of " + TestLogLevel.values() + ", but was "
-                            + levelAsAString,
-                    e);
+            String message = String.format("Unable to determine logger, expected one of %s, but was %s", EnumSet.allOf(TestLogLevel.class), levelAsAString);
+            Logger.getLogger(TestLogLevel.class.getName()).log(Level.FINE, message, e);
             return defaultLevel;
         }
     }

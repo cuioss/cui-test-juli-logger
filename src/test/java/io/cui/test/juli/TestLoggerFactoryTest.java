@@ -40,7 +40,7 @@ class TestLoggerFactoryTest {
     }
 
     @Test
-    public void shouldReadConfiguration() {
+    void shouldReadConfiguration() {
         // Reset logger as preparation
         TestLogLevel.INFO.setAsRootLevel();
         TestLogLevel.INFO.addLogger(SOME_LOGGER);
