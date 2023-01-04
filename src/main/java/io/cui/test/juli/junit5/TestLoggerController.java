@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 
 import io.cui.test.juli.TestLogLevel;
 import io.cui.test.juli.TestLoggerFactory;
+import io.cui.tools.reflect.MoreReflection;
 
 /**
  * Extension for setting up the {@link TestLoggerFactory} properly
@@ -26,7 +27,7 @@ public class TestLoggerController implements BeforeAllCallback, AfterAllCallback
         TestLoggerFactory.getTestHandler().clearRecords();
         Class<?> testClass = context.getTestClass()
                 .orElseThrow(() -> new IllegalStateException("Unable to determine Test-class"));
-        Optional<EnableTestLogger> annotation = RelflectionHelper.extractAnnotation(testClass,
+        Optional<EnableTestLogger> annotation = MoreReflection.extractAnnotation(testClass,
                 EnableTestLogger.class);
         annotation.ifPresent(this::handleEnableTestLoggerAnnotation);
     }
