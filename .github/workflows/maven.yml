@@ -33,45 +33,45 @@ jobs:
     - name: Build with Maven, Java ${{ matrix.version }}
       run: mvn -B package -Dmaven.compiler.source=${{ matrix.version }} -Dmaven.compiler.target=${{ matrix.version }}
 
-#  sonar-build:
-#    needs: build
-#    runs-on: ubuntu-latest
-#    
-#    steps:
-#    - uses: actions/checkout@v3
-#      with:
-#        fetch-depth: 0
-#        
-#    - name: Set up JDK 11 for Sonar-build
-#      uses: actions/setup-java@v3
-#      with:
-#        java-version: '11'
-#        distribution: 'temurin'
-#        cache: maven
-#        
-#    - name: Cache SonarCloud packages
-#      uses: actions/cache@v3
-#      with:
-#        path: ~/.sonar/cache
-#        key: ${{ runner.os }}-sonar
-#        restore-keys: ${{ runner.os }}-sonar
-#        
-#    - uses: radcortez/project-metadata-action@main
-#      name: Retrieve project metadata from '.github/project.yml'
-#      id: metadata
-#      with:
-#        github-token: ${{secrets.GITHUB_TOKEN}}
-#        metadata-file-path: '.github/project.yml'
-#        local-file: true
+  sonar-build:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
         
-#    - name: Build and analyze
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-#        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#      run: mvn -B verify -Psonar -Dsonar.projectKey=${{steps.metadata.outputs.sonar-project-key}} sonar:sonar
+    - name: Set up JDK 11 for Sonar-build
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Cache SonarCloud packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.sonar/cache
+        key: ${{ runner.os }}-sonar
+        restore-keys: ${{ runner.os }}-sonar
+        
+    - uses: radcortez/project-metadata-action@main
+      name: Retrieve project metadata from '.github/project.yml'
+      id: metadata
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        metadata-file-path: '.github/project.yml'
+        local-file: true
+        
+    - name: Build and analyze
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: mvn -B verify -Psonar -Dsonar.projectKey=${{steps.metadata.outputs.sonar-project-key}} sonar:sonar
 
   deploy-snapshot:
-    needs: build
+    needs: sonar-build
     runs-on: ubuntu-latest
 
     steps:
