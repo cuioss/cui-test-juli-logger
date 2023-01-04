@@ -196,51 +196,79 @@ public class LogAsserts {
         assertEquals(1, records.size(), assertionMessage);
     }
 
+    /**
+     * Asserts whether at least one {@link LogRecord} for the given parameter is present
+     * 
+     * @param logLevel to be checked, must not be null
+     * @param messagePart to be checked, must not be null
+     * @param throwable to be checked, must not be null
+     */
     public static void assertLogMessagePresentContaining(TestLogLevel logLevel,
-                                                         String messagePart,
-                                                         Throwable throwable) {
+            String messagePart,
+            Throwable throwable) {
         TestLogHandler testHandler = getTestHandler();
         List<LogRecord> records = testHandler.resolveLogMessagesContaining(logLevel, messagePart, throwable);
         assertNotEquals(0, records.size(),
-            NO_LOG_MESSAGE_FOUND_WITH_LEVEL + logLevel
-                + MESSAGE_CONTAINS + messagePart
-                + AND_THROWABLE + throwable
-                + ALL_LOGS + testHandler.getRecordsAsString());
+                NO_LOG_MESSAGE_FOUND_WITH_LEVEL + logLevel
+                        + MESSAGE_CONTAINS + messagePart
+                        + AND_THROWABLE + throwable
+                        + ALL_LOGS + testHandler.getRecordsAsString());
     }
 
+    /**
+     * Asserts whether at least one {@link LogRecord} for the given parameter is present
+     * 
+     * @param logLevel to be checked, must not be null
+     * @param messagePart to be checked, must not be null
+     * @param throwableClass to be checked, must not be null
+     */
     public static void assertLogMessagePresentContaining(TestLogLevel logLevel,
-                                                         String messagePart,
-                                                         Class<? extends Throwable> throwableClass) {
+            String messagePart,
+            Class<? extends Throwable> throwableClass) {
         TestLogHandler testHandler = getTestHandler();
         List<LogRecord> records = testHandler.resolveLogMessagesContaining(logLevel, messagePart, throwableClass);
         assertNotEquals(0, records.size(),
-            NO_LOG_MESSAGE_FOUND_WITH_LEVEL + logLevel
-                + MESSAGE_CONTAINS + messagePart
-                + AND_THROWABLE + throwableClass
-                + ALL_LOGS + testHandler.getRecordsAsString());
+                NO_LOG_MESSAGE_FOUND_WITH_LEVEL + logLevel
+                        + MESSAGE_CONTAINS + messagePart
+                        + AND_THROWABLE + throwableClass
+                        + ALL_LOGS + testHandler.getRecordsAsString());
     }
 
+    /**
+     * Asserts whether exactly one {@link LogRecord} for the given parameter is present
+     * 
+     * @param logLevel to be checked, must not be null
+     * @param messagePart to be checked, must not be null
+     * @param throwable to be checked, must not be null
+     */
     public static void assertSingleLogMessagePresentContaining(TestLogLevel logLevel,
-                                                               String messagePart,
-                                                               Throwable throwable) {
+            String messagePart,
+            Throwable throwable) {
         TestLogHandler testHandler = getTestHandler();
         List<LogRecord> records = testHandler.resolveLogMessagesContaining(logLevel, messagePart, throwable);
         assertEquals(1, records.size(),
-            NO_LOG_MESSAGE_FOUND_WITH_LEVEL + logLevel
-                + MESSAGE_CONTAINS + messagePart
-                + AND_THROWABLE + throwable
-                + ALL_LOGS + testHandler.getRecordsAsString());
+                NO_LOG_MESSAGE_FOUND_WITH_LEVEL + logLevel
+                        + MESSAGE_CONTAINS + messagePart
+                        + AND_THROWABLE + throwable
+                        + ALL_LOGS + testHandler.getRecordsAsString());
     }
 
+    /**
+     * Asserts whether exactly one {@link LogRecord} for the given parameter is present
+     * 
+     * @param logLevel to be checked, must not be null
+     * @param messagePart to be checked, must not be null
+     * @param throwableClass to be checked, must not be null
+     */
     public static void assertSingleLogMessagePresentContaining(TestLogLevel logLevel,
-                                                               String messagePart,
-                                                               Class<? extends Throwable> throwableClass) {
+            String messagePart,
+            Class<? extends Throwable> throwableClass) {
         TestLogHandler testHandler = getTestHandler();
         List<LogRecord> records = testHandler.resolveLogMessagesContaining(logLevel, messagePart, throwableClass);
         assertEquals(1, records.size(),
-            NO_LOG_MESSAGE_FOUND_WITH_LEVEL + logLevel
-                + MESSAGE_CONTAINS + messagePart
-                + AND_THROWABLE + throwableClass
-                + ALL_LOGS + testHandler.getRecordsAsString());
+                NO_LOG_MESSAGE_FOUND_WITH_LEVEL + logLevel
+                        + MESSAGE_CONTAINS + messagePart
+                        + AND_THROWABLE + throwableClass
+                        + ALL_LOGS + testHandler.getRecordsAsString());
     }
 }

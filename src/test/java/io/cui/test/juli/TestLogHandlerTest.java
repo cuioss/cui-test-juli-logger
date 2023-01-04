@@ -141,6 +141,8 @@ class TestLogHandlerTest {
     }
 
     public static final class LoggerTestException extends RuntimeException {
+        private static final long serialVersionUID = -3887998205854429983L;
+
         public LoggerTestException() {
         }
     }

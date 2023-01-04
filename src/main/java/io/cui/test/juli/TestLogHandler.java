@@ -151,6 +151,14 @@ public class TestLogHandler extends Handler {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * @param level to be checked for message, must not be null
+     * @param messagePart to be checked, must not be null. Compared to
+     *            {@link TestLogHandler#resolveLogMessages(TestLogLevel, String)} this method check
+     *            whether the given text is contained within a {@link LogRecord}
+     * @param throwable to be looked for
+     * @return a {@link List} of found {@link LogRecord}s
+     */
     public List<LogRecord> resolveLogMessagesContaining(TestLogLevel level,
                                                         String messagePart,
                                                         Throwable throwable) {
@@ -160,6 +168,14 @@ public class TestLogHandler extends Handler {
             .collect(Collectors.toList());
     }
 
+    /**
+     * @param level to be checked for message, must not be null
+     * @param messagePart to be checked, must not be null. Compared to
+     *            {@link TestLogHandler#resolveLogMessages(TestLogLevel, String)} this method check
+     *            whether the given text is contained within a {@link LogRecord}
+     * @param throwableClass to be looked for
+     * @return a {@link List} of found {@link LogRecord}s
+     */
     public List<LogRecord> resolveLogMessagesContaining(TestLogLevel level,
                                                         String messagePart,
                                                         Class<? extends Throwable> throwableClass) {
