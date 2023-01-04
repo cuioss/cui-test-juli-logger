@@ -13,6 +13,7 @@
     <version>1.0.0-SNAPSHOT</version>
     <description>Provides some classes simplifying the configuration and asserting of logging in the context of unit-tests 
     </description>
+    <packaging>jar</packaging>
     <url>https://github.com/cuioss/cui-test-juli-logger/</url>
     <scm>
         <url>https://github.com/cuioss/cui-test-juli-logger/</url>
