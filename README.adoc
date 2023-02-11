@@ -2,11 +2,14 @@
 
 == Status
 
-https://sonarcloud.io/summary/new_code?id=cuioss_cui-test-juli-logger[image:https://sonarcloud.io/api/project_badges/measure?project=cuioss_cui-test-juli-logger&metric=alert_status[Quality
-Gate Status]]
 image:https://github.com/cuioss/cui-test-juli-logger/actions/workflows/maven.yml/badge.svg[Java CI with Maven,link=https://github.com/cuioss/cui-test-juli-logger/actions/workflows/maven.yml]
 image:http://img.shields.io/:license-apache-blue.svg[License,link=http://www.apache.org/licenses/LICENSE-2.0.html]
 image:https://maven-badges.herokuapp.com/maven-central/io.github.cuioss.test/cui-test-juli-logger/badge.svg[Maven Central,link=https://maven-badges.herokuapp.com/maven-central/io.github.cuioss.test/cui-test-juli-logger]
+
+https://sonarcloud.io/summary/new_code?id=cuioss_cui-test-juli-logger[image:https://sonarcloud.io/api/project_badges/measure?project=cuioss_cui-test-juli-logger&metric=alert_status[Quality
+Gate Status]]
+image:https://sonarcloud.io/api/project_badges/measure?project=cuioss_cui-test-juli-logger&metric=ncloc[Lines of Code,link=https://sonarcloud.io/summary/new_code?id=cuioss_cui-test-juli-logger]
+image:https://sonarcloud.io/api/project_badges/measure?project=cuioss_cui-test-juli-logger&metric=coverage[Coverage,link=https://sonarcloud.io/summary/new_code?id=cuioss_cui-test-juli-logger]
 
 https://cuioss.github.io/cui-test-juli-logger/index.html[Generated Documentation on github-pages]
 
