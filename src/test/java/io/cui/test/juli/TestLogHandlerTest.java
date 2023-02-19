@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.List;
 import java.util.logging.LogRecord;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -114,7 +113,7 @@ class TestLogHandlerTest {
     @Test
     void containsMessagePartAndThrowableClass(){
         underTest.publish(create(TestLogLevel.DEBUG, MESSAGE, new LoggerTestException()));
-        List<LogRecord> result = underTest.resolveLogMessagesContaining(
+        var result = underTest.resolveLogMessagesContaining(
             TestLogLevel.DEBUG,
             "mess",
             LoggerTestException.class);
@@ -124,15 +123,15 @@ class TestLogHandlerTest {
 
     @Test
     void containsMessagePartAndThrowable(){
-        LoggerTestException ex = new LoggerTestException();
+        var ex = new LoggerTestException();
         underTest.publish(create(TestLogLevel.DEBUG, MESSAGE, ex));
-        List<LogRecord> result = underTest.resolveLogMessagesContaining(TestLogLevel.DEBUG, "mess", ex);
+        var result = underTest.resolveLogMessagesContaining(TestLogLevel.DEBUG, "mess", ex);
         assertNotNull(result);
         assertEquals(1, result.size());
     }
 
     static LogRecord create(TestLogLevel level, String message, Throwable throwable) {
-        LogRecord record = new LogRecord(level.getJuliLevel(), message);
+        var record = new LogRecord(level.getJuliLevel(), message);
         record.setLoggerName(TestLogHandlerTest.class.getName());
         if (null != throwable) {
             record.setThrown(throwable);

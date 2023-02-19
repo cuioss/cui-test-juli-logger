@@ -45,8 +45,8 @@ class TestLoggerFactoryTest {
         TestLogLevel.INFO.setAsRootLevel();
         TestLogLevel.INFO.addLogger(SOME_LOGGER);
 
-        Logger someLogger = Logger.getLogger(SOME_LOGGER);
-        Logger rootLogger = Logger.getLogger("");
+        var someLogger = Logger.getLogger(SOME_LOGGER);
+        var rootLogger = Logger.getLogger("");
 
         assertFalse(TestLogLevel.TRACE.isEnabled(someLogger));
         assertFalse(TestLogLevel.DEBUG.isEnabled(rootLogger));

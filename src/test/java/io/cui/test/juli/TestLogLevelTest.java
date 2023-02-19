@@ -21,8 +21,8 @@ class TestLogLevelTest {
 
     @Test
     void shouldHandleLogLevel() {
-        String name = loggerBase + "a";
-        Logger logger = Logger.getLogger(name);
+        var name = loggerBase + "a";
+        var logger = Logger.getLogger(name);
 
         assertEquals(logger.isLoggable(Level.INFO), TestLogLevel.INFO.isEnabled(logger));
         assertTrue(TestLogLevel.INFO.isEnabled(logger));
@@ -37,7 +37,7 @@ class TestLogLevelTest {
     @Test
     void shouldHandleLogLevelRoot() {
 
-        Logger rootLogger = Logger.getLogger("");
+        var rootLogger = Logger.getLogger("");
         // Set Root-level to debug
         TestLogLevel.DEBUG.setAsRootLevel();
         assertTrue(TestLogLevel.DEBUG.isEnabled(rootLogger));
@@ -46,14 +46,14 @@ class TestLogLevelTest {
 
     @Test
     void shouldHandleLogLevelAsClass() {
-        Logger logger = Logger.getLogger(getClass().getName());
+        var logger = Logger.getLogger(getClass().getName());
         TestLogLevel.INFO.addLogger(getClass());
         assertTrue(TestLogLevel.INFO.isEnabled(logger));
 
         TestLogLevel.WARN.addLogger(getClass());
         assertFalse(TestLogLevel.INFO.isEnabled(logger));
 
-        Logger rootLogger = Logger.getLogger("");
+        var rootLogger = Logger.getLogger("");
         assertFalse(TestLogLevel.DEBUG.isEnabled(rootLogger));
         // Use null as class argument
         TestLogLevel.DEBUG.addLogger((Class<?>) null);

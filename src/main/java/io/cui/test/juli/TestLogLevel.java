@@ -112,7 +112,7 @@ public enum TestLogLevel {
         try {
             return TestLogLevel.valueOf(levelAsAString.toUpperCase());
         } catch (IllegalArgumentException e) {
-            String message = String.format("Unable to determine logger, expected one of %s, but was %s", EnumSet.allOf(TestLogLevel.class), levelAsAString);
+            var message = String.format("Unable to determine logger, expected one of %s, but was %s", EnumSet.allOf(TestLogLevel.class), levelAsAString);
             Logger.getLogger(TestLogLevel.class.getName()).log(Level.FINE, message, e);
             return defaultLevel;
         }

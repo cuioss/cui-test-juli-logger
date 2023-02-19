@@ -20,7 +20,7 @@ class ConsoleHandlerModifier {
      * Saves the current {@link Level} of the {@link ConsoleHandler} for later restoring
      */
     void saveLevel() {
-        Optional<ConsoleHandler> consoleHandler = getConsoleHandler();
+        var consoleHandler = getConsoleHandler();
         consoleHandler.ifPresent(handler -> initialHandlerLevel = handler.getLevel());
     }
 
@@ -30,10 +30,10 @@ class ConsoleHandlerModifier {
      * @param level to be set
      */
     void adjustLevel(TestLogLevel level) {
-        Optional<ConsoleHandler> consoleHandler = getConsoleHandler();
+        var consoleHandler = getConsoleHandler();
         if (consoleHandler.isPresent()) {
-            Level current = consoleHandler.get().getLevel();
-            Level newLevel = level.getJuliLevel();
+            var current = consoleHandler.get().getLevel();
+            var newLevel = level.getJuliLevel();
             if (newLevel.intValue() < current.intValue()) {
                 consoleHandler.get().setLevel(newLevel);
             }
@@ -45,7 +45,7 @@ class ConsoleHandlerModifier {
      * Restores the previously stored {@link Level} of the {@link ConsoleHandler}
      */
     void restoreLevel() {
-        Optional<ConsoleHandler> consoleHandler = getConsoleHandler();
+        var consoleHandler = getConsoleHandler();
         if (consoleHandler.isPresent() && null != initialHandlerLevel
                 && initialHandlerLevel.intValue() != consoleHandler.get().getLevel().intValue()) {
             consoleHandler.get().setLevel(initialHandlerLevel);

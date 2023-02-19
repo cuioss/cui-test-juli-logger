@@ -68,7 +68,7 @@ final class StaticLoggerConfigurator {
      * @return the boolean value of the property, if present, otherwise {@link Optional#empty()}
      */
     Optional<Boolean> getBooleanProperty(final String name) {
-        Optional<String> propertyOption = getStringProperty(name);
+        var propertyOption = getStringProperty(name);
         return propertyOption.map(Boolean::valueOf);
     }
 
@@ -101,7 +101,7 @@ final class StaticLoggerConfigurator {
     }
 
     TestLogLevel getRootLevel() {
-        String configured = getStringProperty(CONFIGURATION_KEY_ROOT_LOG_LEVEL).orElse("");
+        var configured = getStringProperty(CONFIGURATION_KEY_ROOT_LOG_LEVEL).orElse("");
         return TestLogLevel.getLevelOrDefault(configured, TestLogLevel.INFO);
     }
 
@@ -116,7 +116,7 @@ final class StaticLoggerConfigurator {
     }
 
     private void loadPropertyFile() {
-        try (InputStream in = AccessController.doPrivileged((PrivilegedAction<InputStream>) () -> {
+        try (var in = AccessController.doPrivileged((PrivilegedAction<InputStream>) () -> {
             ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
             if (contextClassLoader != null) {
                 return contextClassLoader

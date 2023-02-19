@@ -34,7 +34,7 @@ class LogAssertsTest {
 
     @BeforeEach
     void beforeEach() {
-        TestLogHandler handler = TestLoggerFactory.getTestHandler();
+        var handler = TestLoggerFactory.getTestHandler();
         handler.clearRecords();
         handler.publish(create(DEBUG, MESSAGE, runtimeException));
         handler.publish(create(INFO, MESSAGE, runtimeException));

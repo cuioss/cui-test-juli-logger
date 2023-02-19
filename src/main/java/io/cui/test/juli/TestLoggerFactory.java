@@ -46,7 +46,7 @@ public class TestLoggerFactory {
      */
     public static void uninstall() {
         CONSOLE_HANDLER.restoreLevel();
-        Optional<TestLogHandler> testHandlerOption = getTestHandlerOption();
+        var testHandlerOption = getTestHandlerOption();
         testHandlerOption.ifPresent(testLogHandler -> getRootLogger().removeHandler(testLogHandler));
     }
 
@@ -57,7 +57,7 @@ public class TestLoggerFactory {
      */
     public static void configureLogger() {
         // Set Root logger
-        TestLogLevel rootLevel = configuration.getRootLevel();
+        var rootLevel = configuration.getRootLevel();
         rootLevel.setAsRootLevel();
         CONSOLE_HANDLER.adjustLevel(rootLevel);
         // Set concrete logger

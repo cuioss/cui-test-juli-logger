@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Handler;
-import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.stream.Collectors;
 
@@ -206,24 +205,24 @@ public class TestLogHandler extends Handler {
     }
 
     private static boolean logRecordContains(LogRecord logRecord, String messagePart) {
-        final String msg = logRecord.getMessage();
+        final var msg = logRecord.getMessage();
         return null != msg && msg.contains(messagePart);
     }
 
     private static boolean logRecordContains(LogRecord logRecord, Class<? extends Throwable> throwableClass) {
-        Throwable thrown = logRecord.getThrown();
+        var thrown = logRecord.getThrown();
         return null != thrown
             && thrown.getClass().equals(throwableClass);
     }
 
     private static boolean logRecordContains(LogRecord logRecord, Throwable throwable) {
-        Throwable thrown = logRecord.getThrown();
+        var thrown = logRecord.getThrown();
         return null != thrown
             && thrown.equals(throwable);
     }
 
     private static boolean logRecordContains(LogRecord logRecord, TestLogLevel level) {
-        Level loggedLevel = logRecord.getLevel();
+        var loggedLevel = logRecord.getLevel();
         return null != loggedLevel
             && loggedLevel.equals(level.getJuliLevel());
     }
@@ -248,7 +247,7 @@ public class TestLogHandler extends Handler {
 
         all.forEach(
                 l -> elements.add(TestLogLevel.parse(l.getLevel()) + ": " + l.getLoggerName() + "-" + l.getMessage()));
-        StringBuilder builder = new StringBuilder();
+        var builder = new StringBuilder();
         builder.append("Available Messages:");
         for (String element : elements) {
             builder.append("\n").append(element);
