@@ -13,7 +13,8 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Defines the log-levels with implicit mapping to JUL log level according to:
- * <a href="https://www.slf4j.org/apidocs/org/slf4j/bridge/SLF4JBridgeHandler.html">SLF4JBridgeHandler</a>
+ * <a href=
+ * "https://www.slf4j.org/apidocs/org/slf4j/bridge/SLF4JBridgeHandler.html">SLF4JBridgeHandler</a>
  *
  * @author Oliver Wolff
  *
@@ -112,7 +113,8 @@ public enum TestLogLevel {
         try {
             return TestLogLevel.valueOf(levelAsAString.toUpperCase());
         } catch (IllegalArgumentException e) {
-            var message = String.format("Unable to determine logger, expected one of %s, but was %s", EnumSet.allOf(TestLogLevel.class), levelAsAString);
+            var message = String.format("Unable to determine logger, expected one of %s, but was %s",
+                    EnumSet.allOf(TestLogLevel.class), levelAsAString);
             Logger.getLogger(TestLogLevel.class.getName()).log(Level.FINE, message, e);
             return defaultLevel;
         }

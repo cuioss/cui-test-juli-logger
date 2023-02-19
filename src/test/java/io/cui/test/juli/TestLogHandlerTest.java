@@ -111,18 +111,18 @@ class TestLogHandlerTest {
     }
 
     @Test
-    void containsMessagePartAndThrowableClass(){
+    void containsMessagePartAndThrowableClass() {
         underTest.publish(create(TestLogLevel.DEBUG, MESSAGE, new LoggerTestException()));
         var result = underTest.resolveLogMessagesContaining(
-            TestLogLevel.DEBUG,
-            "mess",
-            LoggerTestException.class);
+                TestLogLevel.DEBUG,
+                "mess",
+                LoggerTestException.class);
         assertNotNull(result);
         assertEquals(1, result.size());
     }
 
     @Test
-    void containsMessagePartAndThrowable(){
+    void containsMessagePartAndThrowable() {
         var ex = new LoggerTestException();
         underTest.publish(create(TestLogLevel.DEBUG, MESSAGE, ex));
         var result = underTest.resolveLogMessagesContaining(TestLogLevel.DEBUG, "mess", ex);
@@ -140,6 +140,7 @@ class TestLogHandlerTest {
     }
 
     public static final class LoggerTestException extends RuntimeException {
+
         private static final long serialVersionUID = -3887998205854429983L;
 
         public LoggerTestException() {

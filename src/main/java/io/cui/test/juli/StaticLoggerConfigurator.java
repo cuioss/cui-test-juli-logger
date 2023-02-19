@@ -28,7 +28,9 @@ import java.util.logging.Logger;
  */
 final class StaticLoggerConfigurator {
 
-    /** The properties from the file system if set: see {@value ConfigurationKeys#PROPERTY_FILE_PATH} */
+    /**
+     * The properties from the file system if set: see {@value ConfigurationKeys#PROPERTY_FILE_PATH}
+     */
     private Properties fileSystemProperties;
 
     /** The storage for programmatically set properties */
@@ -84,7 +86,7 @@ final class StaticLoggerConfigurator {
         Set<String> loggerStrings = new HashSet<>();
         checkIfInitialized();
         for (Object name : fileSystemProperties.keySet()) {
-            if (startsWith( name, LOGGER_PREFIX)) {
+            if (startsWith(name, LOGGER_PREFIX)) {
                 loggerStrings.add(name.toString());
             }
         }
@@ -117,7 +119,7 @@ final class StaticLoggerConfigurator {
 
     private void loadPropertyFile() {
         try (var in = AccessController.doPrivileged((PrivilegedAction<InputStream>) () -> {
-            ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+            var contextClassLoader = Thread.currentThread().getContextClassLoader();
             if (contextClassLoader != null) {
                 return contextClassLoader
                         .getResourceAsStream(PROPERTY_FILE_PATH);
