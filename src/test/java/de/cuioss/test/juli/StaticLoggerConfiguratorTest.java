@@ -1,6 +1,6 @@
-package io.cui.test.juli;
+package de.cuioss.test.juli;
 
-import static io.cui.test.juli.ConfigurationKeys.CONFIGURATION_KEY_ROOT_LOG_LEVEL;
+import static de.cuioss.test.juli.ConfigurationKeys.CONFIGURATION_KEY_ROOT_LOG_LEVEL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

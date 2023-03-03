@@ -1,15 +1,15 @@
-package io.cui.test.juli;
+package de.cuioss.test.juli;
 
-import static io.cui.test.juli.LogAsserts.assertLogMessagePresent;
-import static io.cui.test.juli.LogAsserts.assertLogMessagePresentContaining;
-import static io.cui.test.juli.LogAsserts.assertNoLogMessagePresent;
-import static io.cui.test.juli.LogAsserts.assertSingleLogMessagePresent;
-import static io.cui.test.juli.LogAsserts.assertSingleLogMessagePresentContaining;
-import static io.cui.test.juli.TestLogHandlerTest.MESSAGE;
-import static io.cui.test.juli.TestLogHandlerTest.MESSAGE_PART;
-import static io.cui.test.juli.TestLogHandlerTest.create;
-import static io.cui.test.juli.TestLogLevel.DEBUG;
-import static io.cui.test.juli.TestLogLevel.INFO;
+import static de.cuioss.test.juli.LogAsserts.assertLogMessagePresent;
+import static de.cuioss.test.juli.LogAsserts.assertLogMessagePresentContaining;
+import static de.cuioss.test.juli.LogAsserts.assertNoLogMessagePresent;
+import static de.cuioss.test.juli.LogAsserts.assertSingleLogMessagePresent;
+import static de.cuioss.test.juli.LogAsserts.assertSingleLogMessagePresentContaining;
+import static de.cuioss.test.juli.TestLogHandlerTest.MESSAGE;
+import static de.cuioss.test.juli.TestLogHandlerTest.MESSAGE_PART;
+import static de.cuioss.test.juli.TestLogHandlerTest.create;
+import static de.cuioss.test.juli.TestLogLevel.DEBUG;
+import static de.cuioss.test.juli.TestLogLevel.INFO;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.AfterAll;

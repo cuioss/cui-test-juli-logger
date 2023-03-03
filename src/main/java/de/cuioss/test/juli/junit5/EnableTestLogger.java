@@ -1,4 +1,4 @@
-package io.cui.test.juli.junit5;
+package de.cuioss.test.juli.junit5;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -10,9 +10,9 @@ import java.util.logging.Level;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import io.cui.test.juli.LogAsserts;
-import io.cui.test.juli.TestLogLevel;
-import io.cui.test.juli.TestLoggerFactory;
+import de.cuioss.test.juli.LogAsserts;
+import de.cuioss.test.juli.TestLogLevel;
+import de.cuioss.test.juli.TestLoggerFactory;
 
 /**
  * Meta-annotation that allows test classes to be extended with {@link TestLoggerController}

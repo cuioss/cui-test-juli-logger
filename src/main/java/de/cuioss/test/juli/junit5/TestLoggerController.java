@@ -1,6 +1,6 @@
-package io.cui.test.juli.junit5;
+package de.cuioss.test.juli.junit5;
 
-import static io.cui.test.juli.TestLoggerFactory.addLogger;
+import static de.cuioss.test.juli.TestLoggerFactory.addLogger;
 
 import java.util.Optional;
 
@@ -9,9 +9,9 @@ import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import io.cui.test.juli.TestLogLevel;
-import io.cui.test.juli.TestLoggerFactory;
-import io.cui.tools.reflect.MoreReflection;
+import de.cuioss.test.juli.TestLogLevel;
+import de.cuioss.test.juli.TestLoggerFactory;
+import de.cuioss.tools.reflect.MoreReflection;
 
 /**
  * Extension for setting up the {@link TestLoggerFactory} properly

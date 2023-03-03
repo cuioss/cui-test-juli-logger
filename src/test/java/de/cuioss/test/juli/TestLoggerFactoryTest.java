@@ -1,4 +1,4 @@
-package io.cui.test.juli;
+package de.cuioss.test.juli;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

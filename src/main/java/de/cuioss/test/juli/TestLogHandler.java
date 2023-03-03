@@ -1,6 +1,6 @@
-package io.cui.test.juli;
+package de.cuioss.test.juli;
 
-import static io.cui.tools.string.MoreStrings.isEmpty;
+import static de.cuioss.tools.string.MoreStrings.isEmpty;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

@@ -1,13 +1,13 @@
-package io.cui.test.juli;
+package de.cuioss.test.juli;
 
-import static io.cui.test.juli.TestLoggerFactory.getTestHandler;
+import static de.cuioss.test.juli.TestLoggerFactory.getTestHandler;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.logging.LogRecord;
 
-import io.cui.test.juli.junit5.EnableTestLogger;
+import de.cuioss.test.juli.junit5.EnableTestLogger;
 import lombok.experimental.UtilityClass;
 
 /**

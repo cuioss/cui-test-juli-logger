@@ -1,10 +1,10 @@
-package io.cui.test.juli;
+package de.cuioss.test.juli;
 
-import static io.cui.test.juli.ConfigurationKeys.CONFIGURATION_KEY_ROOT_LOG_LEVEL;
-import static io.cui.test.juli.ConfigurationKeys.LOGGER_PREFIX;
-import static io.cui.test.juli.ConfigurationKeys.PROPERTY_FILE_PATH;
-import static io.cui.tools.string.MoreStrings.isEmpty;
-import static io.cui.tools.string.MoreStrings.nullToEmpty;
+import static de.cuioss.test.juli.ConfigurationKeys.CONFIGURATION_KEY_ROOT_LOG_LEVEL;
+import static de.cuioss.test.juli.ConfigurationKeys.LOGGER_PREFIX;
+import static de.cuioss.test.juli.ConfigurationKeys.PROPERTY_FILE_PATH;
+import static de.cuioss.tools.string.MoreStrings.isEmpty;
+import static de.cuioss.tools.string.MoreStrings.nullToEmpty;
 
 import java.io.IOException;
 import java.io.InputStream;

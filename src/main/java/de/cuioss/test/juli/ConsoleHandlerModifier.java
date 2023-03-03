@@ -1,4 +1,4 @@
-package io.cui.test.juli;
+package de.cuioss.test.juli;
 
 import java.util.Optional;
 import java.util.logging.ConsoleHandler;

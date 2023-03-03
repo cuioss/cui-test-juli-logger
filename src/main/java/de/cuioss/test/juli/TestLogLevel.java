@@ -1,6 +1,6 @@
-package io.cui.test.juli;
+package de.cuioss.test.juli;
 
-import static io.cui.tools.string.MoreStrings.isEmpty;
+import static de.cuioss.tools.string.MoreStrings.isEmpty;
 import static java.util.Objects.requireNonNull;
 
 import java.util.EnumSet;

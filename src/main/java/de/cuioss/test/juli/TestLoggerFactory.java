@@ -1,6 +1,6 @@
-package io.cui.test.juli;
+package de.cuioss.test.juli;
 
-import static io.cui.tools.string.MoreStrings.isEmpty;
+import static de.cuioss.tools.string.MoreStrings.isEmpty;
 
 import java.util.Arrays;
 import java.util.List;
@@ -82,7 +82,7 @@ public class TestLoggerFactory {
      */
     public static TestLogHandler getTestHandler() {
         return getTestHandlerOption().orElseThrow(
-                () -> new AssertionError("Unable to access io.cui.test.juli.TestLogHandler. Used properly?"));
+                () -> new AssertionError("Unable to access de.cuioss.test.juli.TestLogHandler. Used properly?"));
     }
 
     /**
