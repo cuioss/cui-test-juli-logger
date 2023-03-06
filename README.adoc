@@ -23,7 +23,7 @@ Provides some classes simplifying the configuration and asserting of logging in 
 ----
     <dependency>
         <groupId>de.cuioss.test</groupId>
-        <name>cui-test-juli-logger</name>
+        <artifactId>cui-test-juli-logger</artifactId>
     </dependency>
 ----
 
