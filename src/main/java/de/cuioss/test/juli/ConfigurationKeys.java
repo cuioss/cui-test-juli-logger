@@ -13,21 +13,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class ConfigurationKeys {
 
-    /** Defines the property prefix for all properties related to configuring the test-logger. */
+    /**
+     * Defines the property prefix for all properties related to configuring the
+     * test-logger.
+     */
     private static final String PROPERTY_PREFIX = "cui.logging.";
 
     /**
-     * Defines the property prefix for all properties related to configuring certain concrete
-     * logger.
+     * Defines the property prefix for all properties related to configuring certain
+     * concrete logger.
      */
     static final String LOGGER_PREFIX = "cui.logger.";
 
-    /** Defines the name / path of the configuration file: cui_logger.properties */
-    static final String PROPERTY_FILE_PATH = "cui_logger.properties";
-
     /** The key for the default log-level */
-    static final String CONFIGURATION_KEY_ROOT_LOG_LEVEL =
-        PROPERTY_PREFIX + "root_log_level";
+    static final String CONFIGURATION_KEY_ROOT_LOG_LEVEL = PROPERTY_PREFIX + "root_log_level";
 
     /** The value for the default log-level: {@link TestLogLevel#INFO} */
     static final String CONFIGURATION_DEFAULT_ROOT_LOG_LEVEL = TestLogLevel.INFO.toString();

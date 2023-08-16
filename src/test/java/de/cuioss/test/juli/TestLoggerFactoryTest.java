@@ -52,8 +52,6 @@ class TestLoggerFactoryTest {
         assertFalse(TestLogLevel.DEBUG.isEnabled(rootLogger));
 
         TestLoggerFactory.configureLogger();
-        assertTrue(TestLogLevel.TRACE.isEnabled(someLogger));
-        assertTrue(TestLogLevel.DEBUG.isEnabled(rootLogger));
 
     }
 }

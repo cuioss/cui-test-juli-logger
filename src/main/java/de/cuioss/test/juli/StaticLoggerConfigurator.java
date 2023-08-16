@@ -2,44 +2,30 @@ package de.cuioss.test.juli;
 
 import static de.cuioss.test.juli.ConfigurationKeys.CONFIGURATION_KEY_ROOT_LOG_LEVEL;
 import static de.cuioss.test.juli.ConfigurationKeys.LOGGER_PREFIX;
-import static de.cuioss.test.juli.ConfigurationKeys.PROPERTY_FILE_PATH;
 import static de.cuioss.tools.string.MoreStrings.isEmpty;
 import static de.cuioss.tools.string.MoreStrings.nullToEmpty;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- * Wraps the configuration / property management of the static resources, as
- * there are the {@value ConfigurationKeys#PROPERTY_FILE_PATH} and
+ * Wraps the configuration / property management of the static resources, from
  * System-properties
  *
  * @author Oliver Wolff
  */
 final class StaticLoggerConfigurator {
 
-    /**
-     * The properties from the file system if set: see
-     * {@value ConfigurationKeys#PROPERTY_FILE_PATH}
-     */
-    private Properties fileSystemProperties;
-
     /** The storage for programmatically set properties */
     private final Map<String, String> defaultConfiguration = new ConcurrentHashMap<>();
 
     /**
      * Tries to load a property as String. The order is "Programmatically
-     * configured" -> {@link System#getProperties()} file:
-     * {@value ConfigurationKeys#PROPERTY_FILE_PATH} -> Default Configuration
+     * configured" -> {@link System#getProperties()} -> Default Configuration
      *
      * @param name of the property, must not be null
      * @return the string value of the property, if present, otherwise
@@ -52,10 +38,6 @@ final class StaticLoggerConfigurator {
         if (System.getProperties().containsKey(name)) {
             return Optional.of(System.getProperty(name));
         }
-        checkIfInitialized();
-        if (fileSystemProperties.containsKey(name)) {
-            return Optional.of(fileSystemProperties.getProperty(name));
-        }
         if (defaultConfiguration.containsKey(name)) {
             return Optional.of(defaultConfiguration.get(name));
         }
@@ -64,8 +46,7 @@ final class StaticLoggerConfigurator {
 
     /**
      * Tries to load a property as Boolean. The order is "Programmatically
-     * configured" -> {@link System#getProperties()} file:
-     * {@value ConfigurationKeys#PROPERTY_FILE_PATH} -> Default Configuration
+     * configured" -> {@link System#getProperties()} -> Default Configuration
      *
      * @param name of the property
      * @return the boolean value of the property, if present, otherwise
@@ -77,8 +58,7 @@ final class StaticLoggerConfigurator {
     }
 
     /**
-     * @return a {@link Map} of logger configurations, the order is file:
-     *         {@value ConfigurationKeys#PROPERTY_FILE_PATH} ->
+     * @return a {@link Map} of logger configurations, the order is
      *         {@link System#getProperties()}. A logger configuration is assumed as
      *         String starting with {@value ConfigurationKeys#LOGGER_PREFIX}
      */
@@ -86,12 +66,6 @@ final class StaticLoggerConfigurator {
     Map<String, TestLogLevel> getConfiguredLogger() {
         Map<String, TestLogLevel> found = new HashMap<>();
         Set<String> loggerStrings = new HashSet<>();
-        checkIfInitialized();
-        for (Object name : fileSystemProperties.keySet()) {
-            if (startsWith(name, LOGGER_PREFIX)) {
-                loggerStrings.add(name.toString());
-            }
-        }
         for (Object name : System.getProperties().keySet()) {
             if (startsWith(name, LOGGER_PREFIX)) {
                 loggerStrings.add(name.toString());
@@ -107,35 +81,6 @@ final class StaticLoggerConfigurator {
     TestLogLevel getRootLevel() {
         var configured = getStringProperty(CONFIGURATION_KEY_ROOT_LOG_LEVEL).orElse("");
         return TestLogLevel.getLevelOrDefault(configured, TestLogLevel.INFO);
-    }
-
-    private void checkIfInitialized() {
-        if (null == fileSystemProperties) {
-            synchronized (StaticLoggerConfigurator.class) {
-                fileSystemProperties = new Properties();
-                loadPropertyFile();
-                ConfigurationKeys.populateDefaults(defaultConfiguration);
-            }
-        }
-    }
-
-    private void loadPropertyFile() {
-
-        try (var in = accessFromClassLoader()) {
-            if (in != null) {
-                fileSystemProperties.load(in);
-            }
-        } catch (IOException e1) {
-            Logger.getLogger(getClass().getName()).log(Level.FINE, "Unable to load configuration", e1);
-        }
-    }
-
-    private InputStream accessFromClassLoader() {
-        var contextClassLoader = Thread.currentThread().getContextClassLoader();
-        if (contextClassLoader != null) {
-            return contextClassLoader.getResourceAsStream(PROPERTY_FILE_PATH);
-        }
-        return ClassLoader.getSystemResourceAsStream(PROPERTY_FILE_PATH);
     }
 
     static boolean startsWith(Object toBeChecked, String search) {
