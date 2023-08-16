@@ -25,7 +25,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
-import java.util.stream.Collectors;
 
 import lombok.Getter;
 
@@ -79,8 +78,7 @@ public class TestLogHandler extends Handler {
     public List<LogRecord> resolveLogMessages(TestLogLevel level, String message,
             Class<? extends Throwable> throwableClass) {
         assertNotNull(throwableClass, THROWABLE_CLASS_MUST_NOT_BE_NULL);
-        return resolveLogMessages(level, message).stream().filter(r -> logRecordContains(r, throwableClass))
-                .collect(Collectors.toList());
+        return resolveLogMessages(level, message).stream().filter(r -> logRecordContains(r, throwableClass)).toList();
     }
 
     /**
@@ -91,8 +89,7 @@ public class TestLogHandler extends Handler {
      */
     public List<LogRecord> resolveLogMessages(TestLogLevel level, String message, Throwable throwable) {
         assertNotNull(throwable, THROWABLE_MUST_NOT_BE_NULL);
-        return resolveLogMessages(level, message).stream().filter(r -> logRecordContains(r, throwable))
-                .collect(Collectors.toList());
+        return resolveLogMessages(level, message).stream().filter(r -> logRecordContains(r, throwable)).toList();
     }
 
     /**
@@ -102,8 +99,7 @@ public class TestLogHandler extends Handler {
      */
     public List<LogRecord> resolveLogMessages(TestLogLevel level, String message) {
         assertNotNull(message, MESSAGE_MUST_NOT_BE_NULL);
-        return resolveLogMessages(level).stream().filter(r -> message.equals(r.getMessage()))
-                .collect(Collectors.toList());
+        return resolveLogMessages(level).stream().filter(r -> message.equals(r.getMessage())).toList();
     }
 
     /**
@@ -112,7 +108,7 @@ public class TestLogHandler extends Handler {
      */
     public List<LogRecord> resolveLogMessagesForLogger(String logger) {
         assertFalse(isEmpty(logger), LOGGER_MUST_NOT_BE_NULL);
-        return records.stream().filter(r -> logger.equalsIgnoreCase(r.getLoggerName())).collect(Collectors.toList());
+        return records.stream().filter(r -> logger.equalsIgnoreCase(r.getLoggerName())).toList();
     }
 
     /**
@@ -123,7 +119,7 @@ public class TestLogHandler extends Handler {
     public List<LogRecord> resolveLogMessagesForLogger(TestLogLevel level, String logger) {
         assertNotNull(level, TEST_LOG_LEVEL_MUST_NOT_BE_NULL);
         return resolveLogMessagesForLogger(logger).stream().filter(r -> level.getJuliLevel().equals(r.getLevel()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -156,8 +152,7 @@ public class TestLogHandler extends Handler {
      */
     public List<LogRecord> resolveLogMessagesContaining(TestLogLevel level, String messagePart) {
         assertNotNull(messagePart, MESSAGE_MUST_NOT_BE_NULL);
-        return resolveLogMessages(level).stream().filter(r -> logRecordContains(r, messagePart))
-                .collect(Collectors.toList());
+        return resolveLogMessages(level).stream().filter(r -> logRecordContains(r, messagePart)).toList();
     }
 
     /**
@@ -172,7 +167,7 @@ public class TestLogHandler extends Handler {
     public List<LogRecord> resolveLogMessagesContaining(TestLogLevel level, String messagePart, Throwable throwable) {
         assertNotNull(throwable, THROWABLE_MUST_NOT_BE_NULL);
         return resolveLogMessagesContaining(level, messagePart).stream().filter(r -> logRecordContains(r, throwable))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -188,7 +183,7 @@ public class TestLogHandler extends Handler {
             Class<? extends Throwable> throwableClass) {
         assertNotNull(throwableClass, THROWABLE_CLASS_MUST_NOT_BE_NULL);
         return resolveLogMessagesContaining(level, messagePart).stream()
-                .filter(r -> logRecordContains(r, throwableClass)).collect(Collectors.toList());
+                .filter(r -> logRecordContains(r, throwableClass)).toList();
     }
 
     /**
@@ -198,7 +193,7 @@ public class TestLogHandler extends Handler {
     public List<LogRecord> resolveLogMessages(TestLogLevel level) {
         assertNotNull(level, TEST_LOG_LEVEL_MUST_NOT_BE_NULL);
         synchronized (records) {
-            return records.stream().filter(r -> logRecordContains(r, level)).collect(Collectors.toList());
+            return records.stream().filter(r -> logRecordContains(r, level)).toList();
         }
     }
 
