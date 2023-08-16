@@ -45,7 +45,7 @@ Configure for all tests
 class PortalHealthServletTest {}
 ----
 
-The logger and level are rested for each test
+The logger and level are resetted for each test
 
 Asserting log statements: written or not:
 
