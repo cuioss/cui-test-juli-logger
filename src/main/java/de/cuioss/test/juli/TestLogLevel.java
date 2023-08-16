@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * https://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.cuioss.test.juli;
 
 import static de.cuioss.tools.string.MoreStrings.isEmpty;
@@ -39,15 +54,16 @@ public enum TestLogLevel {
     /**
      *
      * @param logger to be checked, must not be null
-     * @return {@code true} if the log-level is enabled on the logger, false otherwise
+     * @return {@code true} if the log-level is enabled on the logger, false
+     *         otherwise
      */
     boolean isEnabled(Logger logger) {
         return logger.isLoggable(getJuliLevel());
     }
 
     /**
-     * Convenient method for setting the root-logger-level in the context of the current
-     * {@link TestLogLevel}
+     * Convenient method for setting the root-logger-level in the context of the
+     * current {@link TestLogLevel}
      *
      * @return the {@link TestLogLevel} itself in order to us is in a fluent way
      */
@@ -56,10 +72,11 @@ public enum TestLogLevel {
     }
 
     /**
-     * Convenient method for setting a Log-Level in the context of the current {@link TestLogLevel}
+     * Convenient method for setting a Log-Level in the context of the current
+     * {@link TestLogLevel}
      *
-     * @param className if it is {@code null} it will set the root-logger for the actual
-     *            Log-Level
+     * @param className if it is {@code null} it will set the root-logger for the
+     *                  actual Log-Level
      * @return the {@link TestLogLevel} itself in order to us is in a fluent way
      */
     public TestLogLevel addLogger(Class<?> className) {
@@ -70,10 +87,11 @@ public enum TestLogLevel {
     }
 
     /**
-     * Convenient method for setting a Log-Level in context of the current {@link TestLogLevel}
+     * Convenient method for setting a Log-Level in context of the current
+     * {@link TestLogLevel}
      *
-     * @param loggerName if it is {@code null} or empty it will set the root-logger for the actual
-     *            Log-Level
+     * @param loggerName if it is {@code null} or empty it will set the root-logger
+     *                   for the actual Log-Level
      * @return the {@link TestLogLevel} itself in order to us is in a fluent way
      */
     public TestLogLevel addLogger(String loggerName) {
@@ -83,7 +101,8 @@ public enum TestLogLevel {
 
     /**
      * @param level to be parsed, must not be null
-     * @return the mapped level or {@link TestLogLevel#INFO} if the level can not be mapped
+     * @return the mapped level or {@link TestLogLevel#INFO} if the level can not be
+     *         mapped
      */
     public static TestLogLevel parse(Level level) {
         requireNonNull(level);
@@ -98,14 +117,14 @@ public enum TestLogLevel {
     /**
      * Factory method for deriving a {@link TestLogLevel} from a given String.
      *
-     * @param levelAsAString The String representation of the desired {@link TestLogLevel}
-     * @param defaultLevel must not be null
-     * @return the desired {@link TestLogLevel} if levelAsAString is null
-     *         or empty or is not a defined {@link TestLogLevel} the method will return the given
-     *         defaultLevel
+     * @param levelAsAString The String representation of the desired
+     *                       {@link TestLogLevel}
+     * @param defaultLevel   must not be null
+     * @return the desired {@link TestLogLevel} if levelAsAString is null or empty
+     *         or is not a defined {@link TestLogLevel} the method will return the
+     *         given defaultLevel
      */
-    static TestLogLevel getLevelOrDefault(final String levelAsAString,
-            final TestLogLevel defaultLevel) {
+    static TestLogLevel getLevelOrDefault(final String levelAsAString, final TestLogLevel defaultLevel) {
         requireNonNull(defaultLevel);
         if (isEmpty(levelAsAString)) {
             return defaultLevel;
@@ -113,8 +132,8 @@ public enum TestLogLevel {
         try {
             return TestLogLevel.valueOf(levelAsAString.toUpperCase());
         } catch (IllegalArgumentException e) {
-            var message = String.format("Unable to determine logger, expected one of %s, but was %s",
-                    EnumSet.allOf(TestLogLevel.class), levelAsAString);
+            var message = "Unable to determine logger, expected one of %s, but was %s"
+                    .formatted(EnumSet.allOf(TestLogLevel.class), levelAsAString);
             Logger.getLogger(TestLogLevel.class.getName()).log(Level.FINE, message, e);
             return defaultLevel;
         }

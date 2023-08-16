@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * https://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.cuioss.test.juli;
 
 import static de.cuioss.tools.string.MoreStrings.isEmpty;
@@ -56,34 +71,32 @@ public class TestLogHandler extends Handler {
     }
 
     /**
-     * @param level to be checked for message, must not be null
-     * @param message to be checked, must not be null
+     * @param level          to be checked for message, must not be null
+     * @param message        to be checked, must not be null
      * @param throwableClass to be checked, must not be null
      * @return a {@link List} of found {@link LogRecord}s
      */
     public List<LogRecord> resolveLogMessages(TestLogLevel level, String message,
             Class<? extends Throwable> throwableClass) {
         assertNotNull(throwableClass, THROWABLE_CLASS_MUST_NOT_BE_NULL);
-        return resolveLogMessages(level, message).stream()
-                .filter(r -> logRecordContains(r, throwableClass))
+        return resolveLogMessages(level, message).stream().filter(r -> logRecordContains(r, throwableClass))
                 .collect(Collectors.toList());
     }
 
     /**
-     * @param level to be checked for message, must not be null
-     * @param message to be checked, must not be null
+     * @param level     to be checked for message, must not be null
+     * @param message   to be checked, must not be null
      * @param throwable to be checked, must not be null
      * @return a {@link List} of found {@link LogRecord}s
      */
     public List<LogRecord> resolveLogMessages(TestLogLevel level, String message, Throwable throwable) {
         assertNotNull(throwable, THROWABLE_MUST_NOT_BE_NULL);
-        return resolveLogMessages(level, message).stream()
-                .filter(r -> logRecordContains(r, throwable))
+        return resolveLogMessages(level, message).stream().filter(r -> logRecordContains(r, throwable))
                 .collect(Collectors.toList());
     }
 
     /**
-     * @param level to be checked for message, must not be null
+     * @param level   to be checked for message, must not be null
      * @param message to be checked, must not be null
      * @return a {@link List} of found {@link LogRecord}s
      */
@@ -99,25 +112,22 @@ public class TestLogHandler extends Handler {
      */
     public List<LogRecord> resolveLogMessagesForLogger(String logger) {
         assertFalse(isEmpty(logger), LOGGER_MUST_NOT_BE_NULL);
-        return records.stream()
-                .filter(r -> logger.equalsIgnoreCase(r.getLoggerName()))
-                .collect(Collectors.toList());
+        return records.stream().filter(r -> logger.equalsIgnoreCase(r.getLoggerName())).collect(Collectors.toList());
     }
 
     /**
-     * @param level to be checked for message, must not be null
+     * @param level  to be checked for message, must not be null
      * @param logger to be checked, must not be null
      * @return a {@link List} of found {@link LogRecord}s
      */
     public List<LogRecord> resolveLogMessagesForLogger(TestLogLevel level, String logger) {
         assertNotNull(level, TEST_LOG_LEVEL_MUST_NOT_BE_NULL);
-        return resolveLogMessagesForLogger(logger).stream()
-                .filter(r -> level.getJuliLevel().equals(r.getLevel()))
+        return resolveLogMessagesForLogger(logger).stream().filter(r -> level.getJuliLevel().equals(r.getLevel()))
                 .collect(Collectors.toList());
     }
 
     /**
-     * @param level to be checked for message, must not be null
+     * @param level  to be checked for message, must not be null
      * @param logger to be checked, must not be null
      * @return a {@link List} of found {@link LogRecord}s
      */
@@ -137,51 +147,48 @@ public class TestLogHandler extends Handler {
     }
 
     /**
-     * @param level to be checked for message, must not be null
+     * @param level       to be checked for message, must not be null
      * @param messagePart to be checked, must not be null. Compared to
-     *            {@link TestLogHandler#resolveLogMessages(TestLogLevel, String)} this method check
-     *            whether the given text is contained within a {@link LogRecord}
+     *                    {@link TestLogHandler#resolveLogMessages(TestLogLevel, String)}
+     *                    this method check whether the given text is contained
+     *                    within a {@link LogRecord}
      * @return a {@link List} of found {@link LogRecord}s
      */
     public List<LogRecord> resolveLogMessagesContaining(TestLogLevel level, String messagePart) {
         assertNotNull(messagePart, MESSAGE_MUST_NOT_BE_NULL);
-        return resolveLogMessages(level).stream()
-                .filter(r -> logRecordContains(r, messagePart))
+        return resolveLogMessages(level).stream().filter(r -> logRecordContains(r, messagePart))
                 .collect(Collectors.toList());
     }
 
     /**
-     * @param level to be checked for message, must not be null
+     * @param level       to be checked for message, must not be null
      * @param messagePart to be checked, must not be null. Compared to
-     *            {@link TestLogHandler#resolveLogMessages(TestLogLevel, String)} this method check
-     *            whether the given text is contained within a {@link LogRecord}
-     * @param throwable to be looked for
+     *                    {@link TestLogHandler#resolveLogMessages(TestLogLevel, String)}
+     *                    this method check whether the given text is contained
+     *                    within a {@link LogRecord}
+     * @param throwable   to be looked for
      * @return a {@link List} of found {@link LogRecord}s
      */
-    public List<LogRecord> resolveLogMessagesContaining(TestLogLevel level,
-            String messagePart,
-            Throwable throwable) {
+    public List<LogRecord> resolveLogMessagesContaining(TestLogLevel level, String messagePart, Throwable throwable) {
         assertNotNull(throwable, THROWABLE_MUST_NOT_BE_NULL);
-        return resolveLogMessagesContaining(level, messagePart).stream()
-                .filter(r -> logRecordContains(r, throwable))
+        return resolveLogMessagesContaining(level, messagePart).stream().filter(r -> logRecordContains(r, throwable))
                 .collect(Collectors.toList());
     }
 
     /**
-     * @param level to be checked for message, must not be null
-     * @param messagePart to be checked, must not be null. Compared to
-     *            {@link TestLogHandler#resolveLogMessages(TestLogLevel, String)} this method check
-     *            whether the given text is contained within a {@link LogRecord}
+     * @param level          to be checked for message, must not be null
+     * @param messagePart    to be checked, must not be null. Compared to
+     *                       {@link TestLogHandler#resolveLogMessages(TestLogLevel, String)}
+     *                       this method check whether the given text is contained
+     *                       within a {@link LogRecord}
      * @param throwableClass to be looked for
      * @return a {@link List} of found {@link LogRecord}s
      */
-    public List<LogRecord> resolveLogMessagesContaining(TestLogLevel level,
-            String messagePart,
+    public List<LogRecord> resolveLogMessagesContaining(TestLogLevel level, String messagePart,
             Class<? extends Throwable> throwableClass) {
         assertNotNull(throwableClass, THROWABLE_CLASS_MUST_NOT_BE_NULL);
         return resolveLogMessagesContaining(level, messagePart).stream()
-                .filter(r -> logRecordContains(r, throwableClass))
-                .collect(Collectors.toList());
+                .filter(r -> logRecordContains(r, throwableClass)).collect(Collectors.toList());
     }
 
     /**
@@ -191,9 +198,7 @@ public class TestLogHandler extends Handler {
     public List<LogRecord> resolveLogMessages(TestLogLevel level) {
         assertNotNull(level, TEST_LOG_LEVEL_MUST_NOT_BE_NULL);
         synchronized (records) {
-            return records.stream()
-                    .filter(r -> logRecordContains(r, level))
-                    .collect(Collectors.toList());
+            return records.stream().filter(r -> logRecordContains(r, level)).collect(Collectors.toList());
         }
     }
 
@@ -211,20 +216,17 @@ public class TestLogHandler extends Handler {
 
     private static boolean logRecordContains(LogRecord logRecord, Class<? extends Throwable> throwableClass) {
         var thrown = logRecord.getThrown();
-        return null != thrown
-                && thrown.getClass().equals(throwableClass);
+        return null != thrown && thrown.getClass().equals(throwableClass);
     }
 
     private static boolean logRecordContains(LogRecord logRecord, Throwable throwable) {
         var thrown = logRecord.getThrown();
-        return null != thrown
-                && thrown.equals(throwable);
+        return null != thrown && thrown.equals(throwable);
     }
 
     private static boolean logRecordContains(LogRecord logRecord, TestLogLevel level) {
         var loggedLevel = logRecord.getLevel();
-        return null != loggedLevel
-                && loggedLevel.equals(level.getJuliLevel());
+        return null != loggedLevel && loggedLevel.equals(level.getJuliLevel());
     }
 
     @Override
