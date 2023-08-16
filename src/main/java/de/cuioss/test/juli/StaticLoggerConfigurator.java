@@ -8,8 +8,6 @@ import static de.cuioss.tools.string.MoreStrings.nullToEmpty;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -21,15 +19,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Wraps the configuration / property management of the static resources, as there are the
- * {@value ConfigurationKeys#PROPERTY_FILE_PATH} and System-properties
+ * Wraps the configuration / property management of the static resources, as
+ * there are the {@value ConfigurationKeys#PROPERTY_FILE_PATH} and
+ * System-properties
  *
  * @author Oliver Wolff
  */
 final class StaticLoggerConfigurator {
 
     /**
-     * The properties from the file system if set: see {@value ConfigurationKeys#PROPERTY_FILE_PATH}
+     * The properties from the file system if set: see
+     * {@value ConfigurationKeys#PROPERTY_FILE_PATH}
      */
     private Properties fileSystemProperties;
 
@@ -37,12 +37,13 @@ final class StaticLoggerConfigurator {
     private final Map<String, String> defaultConfiguration = new ConcurrentHashMap<>();
 
     /**
-     * Tries to load a property as String. The order is "Programmatically configured" ->
-     * {@link System#getProperties()} file: {@value ConfigurationKeys#PROPERTY_FILE_PATH}
-     * -> Default Configuration
+     * Tries to load a property as String. The order is "Programmatically
+     * configured" -> {@link System#getProperties()} file:
+     * {@value ConfigurationKeys#PROPERTY_FILE_PATH} -> Default Configuration
      *
      * @param name of the property, must not be null
-     * @return the string value of the property, if present, otherwise {@link Optional#empty()}
+     * @return the string value of the property, if present, otherwise
+     *         {@link Optional#empty()}
      */
     Optional<String> getStringProperty(final String name) {
         if (isEmpty(name)) {
@@ -62,12 +63,13 @@ final class StaticLoggerConfigurator {
     }
 
     /**
-     * Tries to load a property as Boolean. The order is "Programmatically configured" ->
-     * {@link System#getProperties()} file: {@value ConfigurationKeys#PROPERTY_FILE_PATH}
-     * -> Default Configuration
+     * Tries to load a property as Boolean. The order is "Programmatically
+     * configured" -> {@link System#getProperties()} file:
+     * {@value ConfigurationKeys#PROPERTY_FILE_PATH} -> Default Configuration
      *
      * @param name of the property
-     * @return the boolean value of the property, if present, otherwise {@link Optional#empty()}
+     * @return the boolean value of the property, if present, otherwise
+     *         {@link Optional#empty()}
      */
     Optional<Boolean> getBooleanProperty(final String name) {
         var propertyOption = getStringProperty(name);
@@ -77,8 +79,8 @@ final class StaticLoggerConfigurator {
     /**
      * @return a {@link Map} of logger configurations, the order is file:
      *         {@value ConfigurationKeys#PROPERTY_FILE_PATH} ->
-     *         {@link System#getProperties()}. A logger configuration is assumed as String starting
-     *         with {@value ConfigurationKeys#LOGGER_PREFIX}
+     *         {@link System#getProperties()}. A logger configuration is assumed as
+     *         String starting with {@value ConfigurationKeys#LOGGER_PREFIX}
      */
     @SuppressWarnings("squid:S3655") // owolff: Option is checked before putting into the map
     Map<String, TestLogLevel> getConfiguredLogger() {
@@ -118,20 +120,22 @@ final class StaticLoggerConfigurator {
     }
 
     private void loadPropertyFile() {
-        try (var in = AccessController.doPrivileged((PrivilegedAction<InputStream>) () -> {
-            var contextClassLoader = Thread.currentThread().getContextClassLoader();
-            if (contextClassLoader != null) {
-                return contextClassLoader
-                        .getResourceAsStream(PROPERTY_FILE_PATH);
-            }
-            return ClassLoader.getSystemResourceAsStream(PROPERTY_FILE_PATH);
-        })) {
+
+        try (var in = accessFromClassLoader()) {
             if (in != null) {
                 fileSystemProperties.load(in);
             }
         } catch (IOException e1) {
             Logger.getLogger(getClass().getName()).log(Level.FINE, "Unable to load configuration", e1);
         }
+    }
+
+    private InputStream accessFromClassLoader() {
+        var contextClassLoader = Thread.currentThread().getContextClassLoader();
+        if (contextClassLoader != null) {
+            return contextClassLoader.getResourceAsStream(PROPERTY_FILE_PATH);
+        }
+        return ClassLoader.getSystemResourceAsStream(PROPERTY_FILE_PATH);
     }
 
     static boolean startsWith(Object toBeChecked, String search) {
