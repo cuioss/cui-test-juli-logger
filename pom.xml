@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>de.cuioss</groupId>
         <artifactId>cui-java-parent</artifactId>
-        <version>0.7.8</version>
-        <relativePath />
+        <version>0.8.0</version>
+        <relativePath/>
     </parent>
     <groupId>de.cuioss.test</groupId>
     <artifactId>cui-test-juli-logger</artifactId>
@@ -20,7 +21,8 @@
         <url>https://github.com/cuioss/cui-test-juli-logger/</url>
         <connection>scm:git:https://github.com/cuioss/cui-test-juli-logger.git</connection>
         <developerConnection>
-            scm:git:https://github.com/cuioss/cui-test-juli-logger/</developerConnection>
+            scm:git:https://github.com/cuioss/cui-test-juli-logger/
+        </developerConnection>
         <tag>HEAD</tag>
     </scm>
     <issueManagement>
