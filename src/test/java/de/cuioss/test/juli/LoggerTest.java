@@ -17,9 +17,9 @@ package de.cuioss.test.juli;
 
 import java.util.logging.Logger;
 
-import org.junit.jupiter.api.Test;
 
 import de.cuioss.test.juli.junit5.EnableTestLogger;
+import org.junit.jupiter.api.Test;
 
 @EnableTestLogger
 class LoggerTest {

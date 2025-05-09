@@ -17,10 +17,10 @@ package de.cuioss.test.juli.junit5;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import de.cuioss.test.juli.TestLoggerFactory;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(TestLoggerController.class)
 class TestLoggerControllerTest {

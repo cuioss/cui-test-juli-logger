@@ -23,11 +23,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.util.logging.Level;
 
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import de.cuioss.test.juli.LogAsserts;
 import de.cuioss.test.juli.TestLogLevel;
 import de.cuioss.test.juli.TestLoggerFactory;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
  * Meta-annotation that allows test classes to be extended with

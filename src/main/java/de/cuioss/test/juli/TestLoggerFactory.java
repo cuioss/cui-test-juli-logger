@@ -26,6 +26,7 @@ import java.util.logging.Handler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+
 import lombok.experimental.UtilityClass;
 
 /**
@@ -37,7 +38,7 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 @SuppressWarnings("java:S4792") // owolff: Changing the logger is the actual idea of this type, not
-                                // a security issue
+// a security issue
 public class TestLoggerFactory {
 
     private static final StaticLoggerConfigurator configuration = new StaticLoggerConfigurator();
