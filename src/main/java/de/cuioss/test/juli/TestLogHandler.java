@@ -1,12 +1,12 @@
-/*
- * Copyright 2023 the original author or authors.
- * <p>
+/**
+ * Copyright © 2025 CUI-OpenSource-Software (info@cuioss.de)
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -50,8 +50,7 @@ public class TestLogHandler extends Handler {
     @Getter
     private final List<LogRecord> records = Collections.synchronizedList(new ArrayList<>());
 
-    @Override
-    public void publish(LogRecord logRecord) {
+    @Override public void publish(LogRecord logRecord) {
         // Silently ignore null records.
         if (logRecord == null) {
             return;
@@ -60,13 +59,11 @@ public class TestLogHandler extends Handler {
 
     }
 
-    @Override
-    public void close() {
+    @Override public void close() {
         // There is no need to close
     }
 
-    @Override
-    public void flush() {
+    @Override public void flush() {
         // There is no need to flush
     }
 
@@ -225,8 +222,7 @@ public class TestLogHandler extends Handler {
         return null != loggedLevel && loggedLevel.equals(level.getJuliLevel());
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return getClass().getName() + " with " + getRecords().size() + " entries";
     }
 

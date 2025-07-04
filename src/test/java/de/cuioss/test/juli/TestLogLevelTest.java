@@ -1,12 +1,12 @@
-/*
- * Copyright 2023 the original author or authors.
- * <p>
+/**
+ * Copyright © 2025 CUI-OpenSource-Software (info@cuioss.de)
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,13 +30,11 @@ class TestLogLevelTest {
 
     private final String loggerBase = getClass().getName() + ".";
 
-    @BeforeEach
-    void before() {
+    @BeforeEach void before() {
         TestLogLevel.INFO.setAsRootLevel().addLogger(getClass());
     }
 
-    @Test
-    void shouldHandleLogLevel() {
+    @Test void shouldHandleLogLevel() {
         var name = loggerBase + "a";
         var logger = Logger.getLogger(name);
 
@@ -50,8 +48,7 @@ class TestLogLevelTest {
 
     }
 
-    @Test
-    void shouldHandleLogLevelRoot() {
+    @Test void shouldHandleLogLevelRoot() {
 
         var rootLogger = Logger.getLogger("");
         // Set Root-level to debug
@@ -60,8 +57,7 @@ class TestLogLevelTest {
         assertFalse(TestLogLevel.TRACE.isEnabled(rootLogger));
     }
 
-    @Test
-    void shouldHandleLogLevelAsClass() {
+    @Test void shouldHandleLogLevelAsClass() {
         var logger = Logger.getLogger(getClass().getName());
         TestLogLevel.INFO.addLogger(getClass());
         assertTrue(TestLogLevel.INFO.isEnabled(logger));
@@ -76,8 +72,7 @@ class TestLogLevelTest {
         assertTrue(TestLogLevel.DEBUG.isEnabled(rootLogger));
     }
 
-    @Test
-    void shouldParseLoglevel() {
+    @Test void shouldParseLoglevel() {
         assertEquals(TestLogLevel.ERROR,
                 TestLogLevel.getLevelOrDefault(TestLogLevel.ERROR.toString(), TestLogLevel.DEBUG));
         assertEquals(TestLogLevel.DEBUG, TestLogLevel.getLevelOrDefault("", TestLogLevel.DEBUG));
