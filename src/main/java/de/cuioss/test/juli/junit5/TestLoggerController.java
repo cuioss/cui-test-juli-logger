@@ -1,12 +1,12 @@
-/*
- * Copyright 2023 the original author or authors.
- * <p>
+/**
+ * Copyright © 2025 CUI-OpenSource-Software (info@cuioss.de)
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,8 +36,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
  */
 public class TestLoggerController implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback {
 
-    @Override
-    public void beforeEach(ExtensionContext context) {
+    @Override public void beforeEach(ExtensionContext context) {
         TestLoggerFactory.configureLogger();
         TestLoggerFactory.getTestHandler().clearRecords();
         Class<?> testClass = context.getTestClass()
@@ -46,13 +45,11 @@ public class TestLoggerController implements BeforeAllCallback, AfterAllCallback
         annotation.ifPresent(this::handleEnableTestLoggerAnnotation);
     }
 
-    @Override
-    public void afterAll(ExtensionContext context) {
+    @Override public void afterAll(ExtensionContext context) {
         TestLoggerFactory.uninstall();
     }
 
-    @Override
-    public void beforeAll(ExtensionContext context) {
+    @Override public void beforeAll(ExtensionContext context) {
         TestLoggerFactory.install();
     }
 
