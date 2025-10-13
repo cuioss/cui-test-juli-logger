@@ -48,6 +48,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
  * "cui_logger.properties"
  * </p>
  * <p>
+ * <b>Nested Test Classes:</b> Nested test classes (annotated with {@code @Nested})
+ * automatically inherit the configuration from their parent test class. If a nested
+ * class has its own {@code @EnableTestLogger} annotation, it will extend or override
+ * the parent's configuration. Parent configurations are applied first, followed by
+ * nested class configurations.
+ * </p>
+ * <p>
  * Use {@link LogAsserts} to make assertions to logged data.
  * </p>
  *

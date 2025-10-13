@@ -17,6 +17,9 @@ package de.cuioss.test.juli.junit5;
 
 import static de.cuioss.test.juli.TestLoggerFactory.addLogger;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -39,10 +42,14 @@ public class TestLoggerController implements BeforeAllCallback, AfterAllCallback
     @Override public void beforeEach(ExtensionContext context) {
         TestLoggerFactory.configureLogger();
         TestLoggerFactory.getTestHandler().clearRecords();
-        Class<?> testClass = context.getTestClass()
-                .orElseThrow(() -> new IllegalStateException("Unable to determine Test-class"));
-        Optional<EnableTestLogger> annotation = MoreReflection.extractAnnotation(testClass, EnableTestLogger.class);
-        annotation.ifPresent(this::handleEnableTestLoggerAnnotation);
+
+        // Collect annotations from parent classes (outer test classes) to current class
+        List<EnableTestLogger> annotations = collectAnnotationsFromHierarchy(context);
+
+        // Apply annotations in order: parent first, then child (so child can override)
+        for (EnableTestLogger annotation : annotations) {
+            handleEnableTestLoggerAnnotation(annotation);
+        }
     }
 
     @Override public void afterAll(ExtensionContext context) {
@@ -51,6 +58,33 @@ public class TestLoggerController implements BeforeAllCallback, AfterAllCallback
 
     @Override public void beforeAll(ExtensionContext context) {
         TestLoggerFactory.install();
+    }
+
+    /**
+     * Collects @EnableTestLogger annotations from the entire test class hierarchy,
+     * starting from the outermost parent class down to the current test class.
+     * This enables nested test classes to inherit configuration from their parent classes.
+     *
+     * @param context the current extension context
+     * @return list of annotations in parent-to-child order
+     */
+    private List<EnableTestLogger> collectAnnotationsFromHierarchy(ExtensionContext context) {
+        List<EnableTestLogger> annotations = new ArrayList<>();
+
+        // Walk up the context hierarchy to collect all test classes
+        ExtensionContext current = context;
+        while (current != null) {
+            current.getTestClass().ifPresent(testClass -> {
+                Optional<EnableTestLogger> annotation = MoreReflection.extractAnnotation(testClass, EnableTestLogger.class);
+                annotation.ifPresent(annotations::add);
+            });
+            current = current.getParent().orElse(null);
+        }
+
+        // Reverse the list so we apply parent annotations first
+        Collections.reverse(annotations);
+
+        return annotations;
     }
 
     private void handleEnableTestLoggerAnnotation(EnableTestLogger annotation) {
