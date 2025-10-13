@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright © 2025 CUI-OpenSource-Software (info@cuioss.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith(TestLoggerController.class)
 class TestLoggerControllerTest {
 
-    @Test void shouldBeInstalledAndConfiguredAndEmptied() {
+    @Test
+    void shouldBeInstalledAndConfiguredAndEmptied() {
         assertTrue(TestLoggerFactory.getTestHandlerOption().isPresent());
         assertTrue(TestLoggerFactory.getTestHandler().getRecords().isEmpty());
     }

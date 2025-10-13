@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright © 2025 CUI-OpenSource-Software (info@cuioss.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,8 @@ class LoggerTest {
     private static final String HELLO = "Hello";
     private static final Logger LOG = Logger.getLogger(LoggerTest.class.getName());
 
-    @Test void doLog() {
+    @Test
+    void doLog() {
         LOG.log(TestLogLevel.INFO.getJuliLevel(), HELLO);
         LogAsserts.assertSingleLogMessagePresent(TestLogLevel.INFO, HELLO);
         TestLogLevel.DEBUG.addLogger(getClass());

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright © 2025 CUI-OpenSource-Software (info@cuioss.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,6 +46,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
  * unit-tests. The level defined within this annotation will overwrite settings
  * found either within {@link System#getProperty(String)} and
  * "cui_logger.properties"
+ * </p>
+ * <p>
+ * <b>Nested Test Classes:</b> Nested test classes (annotated with {@code @Nested})
+ * automatically inherit the configuration from their parent test class. If a nested
+ * class has its own {@code @EnableTestLogger} annotation, it will extend or override
+ * the parent's configuration. Parent configurations are applied first, followed by
+ * nested class configurations.
  * </p>
  * <p>
  * Use {@link LogAsserts} to make assertions to logged data.

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright © 2025 CUI-OpenSource-Software (info@cuioss.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,10 +27,10 @@ import org.junit.jupiter.api.Test;
 
 class TestLoggerFactoryTest {
 
-    /** . */
     private static final String SOME_LOGGER = "some.logger";
 
-    @Test void shouldInstallAndUninstall() {
+    @Test
+    void shouldInstallAndUninstall() {
         assertFalse(TestLoggerFactory.getTestHandlerOption().isPresent());
         TestLoggerFactory.install();
         assertTrue(TestLoggerFactory.getTestHandlerOption().isPresent());
@@ -44,7 +44,8 @@ class TestLoggerFactoryTest {
         assertFalse(TestLoggerFactory.getTestHandlerOption().isPresent());
     }
 
-    @Test void shouldHandleMissingInstallation() {
+    @Test
+    void shouldHandleMissingInstallation() {
         assertThrows(AssertionError.class, TestLoggerFactory::getTestHandler);
         TestLoggerFactory.install();
         assertNotNull(TestLoggerFactory.getTestHandler());
@@ -53,7 +54,8 @@ class TestLoggerFactoryTest {
         assertThrows(AssertionError.class, TestLoggerFactory::getTestHandler);
     }
 
-    @Test void shouldReadConfiguration() {
+    @Test
+    void shouldReadConfiguration() {
         // Reset logger as preparation
         TestLogLevel.INFO.setAsRootLevel();
         TestLogLevel.INFO.addLogger(SOME_LOGGER);

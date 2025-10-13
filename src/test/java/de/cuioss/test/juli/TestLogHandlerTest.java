@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright © 2025 CUI-OpenSource-Software (info@cuioss.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,11 +33,13 @@ class TestLogHandlerTest {
 
     private TestLogHandler underTest;
 
-    @BeforeEach void before() {
+    @BeforeEach
+    void before() {
         underTest = new TestLogHandler();
     }
 
-    @Test void shouldFilterByLogLevel() {
+    @Test
+    void shouldFilterByLogLevel() {
         underTest.publish(create(TestLogLevel.DEBUG, MESSAGE, null));
         underTest.publish(create(TestLogLevel.INFO, MESSAGE, null));
         underTest.publish(create(TestLogLevel.INFO, MESSAGE_2, null));
@@ -46,7 +48,8 @@ class TestLogHandlerTest {
         assertEquals(2, underTest.resolveLogMessages(TestLogLevel.INFO).size());
     }
 
-    @Test void shouldResolveForLogger() {
+    @Test
+    void shouldResolveForLogger() {
         underTest.publish(create(TestLogLevel.DEBUG, MESSAGE, null));
         underTest.publish(create(TestLogLevel.INFO, MESSAGE, null));
         underTest.publish(create(TestLogLevel.INFO, MESSAGE_2, null));
@@ -58,7 +61,8 @@ class TestLogHandlerTest {
         assertEquals(0, underTest.resolveLogMessagesForLogger(TestLogLevel.INFO, TestLogHandler.class).size());
     }
 
-    @Test void shouldFilterByLogLevelAndMessage() {
+    @Test
+    void shouldFilterByLogLevelAndMessage() {
         underTest.publish(create(TestLogLevel.DEBUG, MESSAGE, null));
         underTest.publish(create(TestLogLevel.INFO, MESSAGE, null));
         underTest.publish(create(TestLogLevel.INFO, MESSAGE_2, null));
@@ -68,7 +72,8 @@ class TestLogHandlerTest {
         assertEquals(1, underTest.resolveLogMessages(TestLogLevel.INFO, MESSAGE_2).size());
     }
 
-    @Test void shouldFilterByLogLevelAndMessageContains() {
+    @Test
+    void shouldFilterByLogLevelAndMessageContains() {
         underTest.publish(create(TestLogLevel.INFO, MESSAGE, null));
         underTest.publish(create(TestLogLevel.INFO, MESSAGE_2, null));
         underTest.publish(create(TestLogLevel.INFO, null, null));
@@ -76,8 +81,9 @@ class TestLogHandlerTest {
         assertEquals(0, underTest.resolveLogMessagesContaining(TestLogLevel.INFO, "notIn").size());
     }
 
-    @Test void shouldFilterByLogLevelAndMessageAndThrowable() {
-        Throwable exception = new RuntimeException();
+    @Test
+    void shouldFilterByLogLevelAndMessageAndThrowable() {
+        Throwable exception = new IllegalStateException("Test exception");
         Throwable exception2 = new IllegalArgumentException();
         underTest.publish(create(TestLogLevel.INFO, MESSAGE, exception));
         underTest.publish(create(TestLogLevel.INFO, MESSAGE, exception2));
@@ -85,8 +91,9 @@ class TestLogHandlerTest {
         assertEquals(1, underTest.resolveLogMessages(TestLogLevel.INFO, MESSAGE, exception).size());
     }
 
-    @Test void shouldFilterByLogLevelAndMessageAndThrowableClass() {
-        Throwable exception = new RuntimeException();
+    @Test
+    void shouldFilterByLogLevelAndMessageAndThrowableClass() {
+        Throwable exception = new IllegalStateException("Test exception");
         Throwable exception2 = new IllegalArgumentException();
         underTest.publish(create(TestLogLevel.INFO, MESSAGE, exception));
         underTest.publish(create(TestLogLevel.INFO, MESSAGE, exception2));
@@ -94,35 +101,41 @@ class TestLogHandlerTest {
         assertEquals(1, underTest.resolveLogMessages(TestLogLevel.INFO, MESSAGE, exception.getClass()).size());
     }
 
-    @Test void shouldClear() {
+    @Test
+    void shouldClear() {
         underTest.publish(create(TestLogLevel.INFO, MESSAGE, null));
         assertEquals(1, underTest.resolveLogMessages(TestLogLevel.INFO).size());
         underTest.clearRecords();
         assertEquals(0, underTest.resolveLogMessages(TestLogLevel.INFO).size());
     }
 
-    @Test void shouldHandleCloseAndFlush() {
+    @Test
+    void shouldHandleCloseAndFlush() {
         assertDoesNotThrow(() -> underTest.flush());
         assertDoesNotThrow(() -> underTest.close());
     }
 
-    @Test void shouldIgnoreNullLogRecords() {
+    @Test
+    void shouldIgnoreNullLogRecords() {
         underTest.publish(null);
         assertEquals(0, underTest.resolveLogMessages(TestLogLevel.TRACE).size());
     }
 
-    @Test void shouldHandleToString() {
+    @Test
+    void shouldHandleToString() {
         assertNotNull(underTest.toString());
     }
 
-    @Test void containsMessagePartAndThrowableClass() {
+    @Test
+    void containsMessagePartAndThrowableClass() {
         underTest.publish(create(TestLogLevel.DEBUG, MESSAGE, new LoggerTestException()));
         var result = underTest.resolveLogMessagesContaining(TestLogLevel.DEBUG, "mess", LoggerTestException.class);
         assertNotNull(result);
         assertEquals(1, result.size());
     }
 
-    @Test void containsMessagePartAndThrowable() {
+    @Test
+    void containsMessagePartAndThrowable() {
         var ex = new LoggerTestException();
         underTest.publish(create(TestLogLevel.DEBUG, MESSAGE, ex));
         var result = underTest.resolveLogMessagesContaining(TestLogLevel.DEBUG, "mess", ex);

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright © 2025 CUI-OpenSource-Software (info@cuioss.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,11 +30,13 @@ class TestLogLevelTest {
 
     private final String loggerBase = getClass().getName() + ".";
 
-    @BeforeEach void before() {
+    @BeforeEach
+    void before() {
         TestLogLevel.INFO.setAsRootLevel().addLogger(getClass());
     }
 
-    @Test void shouldHandleLogLevel() {
+    @Test
+    void shouldHandleLogLevel() {
         var name = loggerBase + "a";
         var logger = Logger.getLogger(name);
 
@@ -48,7 +50,8 @@ class TestLogLevelTest {
 
     }
 
-    @Test void shouldHandleLogLevelRoot() {
+    @Test
+    void shouldHandleLogLevelRoot() {
 
         var rootLogger = Logger.getLogger("");
         // Set Root-level to debug
@@ -57,7 +60,8 @@ class TestLogLevelTest {
         assertFalse(TestLogLevel.TRACE.isEnabled(rootLogger));
     }
 
-    @Test void shouldHandleLogLevelAsClass() {
+    @Test
+    void shouldHandleLogLevelAsClass() {
         var logger = Logger.getLogger(getClass().getName());
         TestLogLevel.INFO.addLogger(getClass());
         assertTrue(TestLogLevel.INFO.isEnabled(logger));
@@ -72,7 +76,8 @@ class TestLogLevelTest {
         assertTrue(TestLogLevel.DEBUG.isEnabled(rootLogger));
     }
 
-    @Test void shouldParseLoglevel() {
+    @Test
+    void shouldParseLoglevel() {
         assertEquals(TestLogLevel.ERROR,
                 TestLogLevel.getLevelOrDefault(TestLogLevel.ERROR.toString(), TestLogLevel.DEBUG));
         assertEquals(TestLogLevel.DEBUG, TestLogLevel.getLevelOrDefault("", TestLogLevel.DEBUG));

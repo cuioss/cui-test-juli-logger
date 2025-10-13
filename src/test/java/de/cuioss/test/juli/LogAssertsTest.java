@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright © 2025 CUI-OpenSource-Software (info@cuioss.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,18 +35,21 @@ import org.junit.jupiter.api.Test;
 
 class LogAssertsTest {
 
-    private final RuntimeException runtimeException = new RuntimeException();
+    private final IllegalStateException runtimeException = new IllegalStateException("Test exception for logging");
     private final IllegalArgumentException illegalArgumentException = new IllegalArgumentException();
 
-    @BeforeAll static void beforeAll() {
+    @BeforeAll
+    static void beforeAll() {
         TestLoggerFactory.install();
     }
 
-    @AfterAll static void afterAll() {
+    @AfterAll
+    static void afterAll() {
         TestLoggerFactory.uninstall();
     }
 
-    @BeforeEach void beforeEach() {
+    @BeforeEach
+    void beforeEach() {
         var handler = TestLoggerFactory.getTestHandler();
         handler.clearRecords();
         handler.publish(create(DEBUG, MESSAGE, runtimeException));
@@ -54,7 +57,8 @@ class LogAssertsTest {
         handler.publish(create(INFO, MESSAGE, illegalArgumentException));
     }
 
-    @Test void shouldAssertLogMessageExact() {
+    @Test
+    void shouldAssertLogMessageExact() {
         assertLogMessagePresent(DEBUG, MESSAGE);
         assertLogMessagePresent(INFO, MESSAGE);
 
@@ -63,19 +67,22 @@ class LogAssertsTest {
         assertThrows(AssertionError.class, () -> assertSingleLogMessagePresent(INFO, MESSAGE));
     }
 
-    @Test void shouldAssertNoLogMessagePresent() {
+    @Test
+    void shouldAssertNoLogMessagePresent() {
         assertNoLogMessagePresent(INFO, "Not there");
 
         assertThrows(AssertionError.class, () -> assertNoLogMessagePresent(INFO, MESSAGE));
     }
 
-    @Test void shouldAssertNoMessageForLoggerPresent() {
+    @Test
+    void shouldAssertNoMessageForLoggerPresent() {
         assertNoLogMessagePresent(TestLogLevel.TRACE, TestLogLevelTest.class);
 
         assertThrows(AssertionError.class, () -> assertNoLogMessagePresent(INFO, TestLogHandlerTest.class));
     }
 
-    @Test void shouldAssertLogMessageWithException() {
+    @Test
+    void shouldAssertLogMessageWithException() {
         assertLogMessagePresent(DEBUG, MESSAGE, runtimeException);
         assertLogMessagePresent(INFO, MESSAGE, runtimeException);
         assertLogMessagePresent(INFO, MESSAGE, illegalArgumentException);
@@ -86,7 +93,8 @@ class LogAssertsTest {
                 () -> assertSingleLogMessagePresent(DEBUG, MESSAGE, illegalArgumentException));
     }
 
-    @Test void shouldAssertLogMessageWithExceptionClass() {
+    @Test
+    void shouldAssertLogMessageWithExceptionClass() {
         assertLogMessagePresent(DEBUG, MESSAGE, runtimeException.getClass());
         assertLogMessagePresent(INFO, MESSAGE, runtimeException.getClass());
         assertLogMessagePresent(INFO, MESSAGE, illegalArgumentException.getClass());
@@ -97,7 +105,8 @@ class LogAssertsTest {
                 () -> assertSingleLogMessagePresent(DEBUG, MESSAGE, IllegalArgumentException.class));
     }
 
-    @Test void shouldAssertLogMessageContains() {
+    @Test
+    void shouldAssertLogMessageContains() {
         assertLogMessagePresentContaining(DEBUG, MESSAGE_PART);
         assertLogMessagePresentContaining(INFO, MESSAGE_PART);
 
@@ -106,19 +115,23 @@ class LogAssertsTest {
         assertThrows(AssertionError.class, () -> assertSingleLogMessagePresentContaining(INFO, MESSAGE));
     }
 
-    @Test void shouldAssertLogMsgContainingThrowable() {
+    @Test
+    void shouldAssertLogMsgContainingThrowable() {
         LogAsserts.assertLogMessagePresentContaining(DEBUG, MESSAGE_PART, runtimeException);
     }
 
-    @Test void shouldAssertSingleLogMsgContainingThrowable() {
+    @Test
+    void shouldAssertSingleLogMsgContainingThrowable() {
         LogAsserts.assertSingleLogMessagePresentContaining(DEBUG, MESSAGE_PART, runtimeException);
     }
 
-    @Test void shouldAssertLogMsgContainingThrowableClass() {
+    @Test
+    void shouldAssertLogMsgContainingThrowableClass() {
         LogAsserts.assertLogMessagePresentContaining(DEBUG, MESSAGE_PART, runtimeException.getClass());
     }
 
-    @Test void shouldAssertSingleLogMsgContainingThrowableClass() {
+    @Test
+    void shouldAssertSingleLogMsgContainingThrowableClass() {
         LogAsserts.assertSingleLogMessagePresentContaining(DEBUG, MESSAGE_PART, runtimeException.getClass());
     }
 }

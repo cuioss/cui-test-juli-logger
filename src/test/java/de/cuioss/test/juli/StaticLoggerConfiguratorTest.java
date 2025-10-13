@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright © 2025 CUI-OpenSource-Software (info@cuioss.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,12 +29,14 @@ class StaticLoggerConfiguratorTest {
     private static final String BOOLEAN_SYTEM_PROPERTY_NAME = "some.system.property";
     private StaticLoggerConfigurator underTest;
 
-    @BeforeEach void before() {
+    @BeforeEach
+    void before() {
         System.clearProperty(BOOLEAN_SYTEM_PROPERTY_NAME);
         underTest = new StaticLoggerConfigurator();
     }
 
-    @Test void shouldReadSystemProperty() {
+    @Test
+    void shouldReadSystemProperty() {
         assertFalse(underTest.getStringProperty(BOOLEAN_SYTEM_PROPERTY_NAME).isPresent());
         System.setProperty(BOOLEAN_SYTEM_PROPERTY_NAME, "true");
         assertTrue(underTest.getStringProperty(BOOLEAN_SYTEM_PROPERTY_NAME).isPresent());
@@ -42,7 +44,8 @@ class StaticLoggerConfiguratorTest {
         assertEquals("true", underTest.getStringProperty(BOOLEAN_SYTEM_PROPERTY_NAME).get());
     }
 
-    @Test void shouldDetermineLoggerFromSystemProperty() {
+    @Test
+    void shouldDetermineLoggerFromSystemProperty() {
         final var testLogger = "test.logger";
         System.setProperty(LOGGER_PREFIX + testLogger, BOOLEAN_SYTEM_PROPERTY_NAME);
         assertEquals(1, underTest.getConfiguredLogger().size());
