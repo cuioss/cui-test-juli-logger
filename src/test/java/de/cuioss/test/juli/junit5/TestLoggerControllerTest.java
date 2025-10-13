@@ -25,7 +25,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith(TestLoggerController.class)
 class TestLoggerControllerTest {
 
-    @Test void shouldBeInstalledAndConfiguredAndEmptied() {
+    @Test
+    void shouldBeInstalledAndConfiguredAndEmptied() {
         assertTrue(TestLoggerFactory.getTestHandlerOption().isPresent());
         assertTrue(TestLoggerFactory.getTestHandler().getRecords().isEmpty());
     }

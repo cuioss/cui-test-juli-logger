@@ -31,7 +31,8 @@ import org.junit.jupiter.api.Test;
 @EnableTestLogger(rootLevel = TestLogLevel.INFO, trace = LogAsserts.class, debug = TestLogLevel.class, info = TestLoggerFactory.class, warn = List.class, error = Set.class)
 class EnableTestLoggerTest {
 
-    @Test void shouldBeInstalledAndConfiguredAndEmptied() {
+    @Test
+    void shouldBeInstalledAndConfiguredAndEmptied() {
         assertTrue(TestLoggerFactory.getTestHandlerOption().isPresent());
         assertTrue(TestLoggerFactory.getTestHandler().getRecords().isEmpty());
     }
