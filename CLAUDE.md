@@ -85,7 +85,7 @@ Configuration keys defined in `ConfigurationKeys.java`:
 ## Development Conventions
 
 - **Project uses Lombok**: Code uses `@UtilityClass`, `@Getter`, `@RequiredArgsConstructor`
-- **Parent POM**: `de.cuioss:cui-java-parent:1.1.0` provides shared configuration
+- **Parent POM**: `de.cuioss:cui-java-parent:1.3.1` provides shared configuration
 - **Dependency**: Uses `de.cuioss:cui-java-tools` for string utilities
 - **Module name**: `de.cuioss.test.juli` (automatic module)
 - **License**: Apache 2.0
