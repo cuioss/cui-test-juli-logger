@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright © 2025 CUI-OpenSource-Software (info@cuioss.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 
 class LogAssertsTest {
 
-    private final RuntimeException runtimeException = new RuntimeException();
+    private final RuntimeException runtimeException = /*~~(TODO: Use specific not RuntimeException. Suppress: // cui-rewrite:disable InvalidExceptionUsageRecipe)~~>*/new RuntimeException();
     private final IllegalArgumentException illegalArgumentException = new IllegalArgumentException();
 
     @BeforeAll static void beforeAll() {

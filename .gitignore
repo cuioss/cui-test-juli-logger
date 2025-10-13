@@ -8,3 +8,6 @@
 *.project
 .DS_Store
 .asciidoctorconfig.adoc
+
+# Claude Code configuration
+.claude/

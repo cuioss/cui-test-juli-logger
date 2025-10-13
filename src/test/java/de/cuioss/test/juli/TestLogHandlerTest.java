@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright © 2025 CUI-OpenSource-Software (info@cuioss.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -77,7 +77,7 @@ class TestLogHandlerTest {
     }
 
     @Test void shouldFilterByLogLevelAndMessageAndThrowable() {
-        Throwable exception = new RuntimeException();
+        Throwable exception = /*~~(TODO: Use specific not RuntimeException. Suppress: // cui-rewrite:disable InvalidExceptionUsageRecipe)~~>*/new RuntimeException();
         Throwable exception2 = new IllegalArgumentException();
         underTest.publish(create(TestLogLevel.INFO, MESSAGE, exception));
         underTest.publish(create(TestLogLevel.INFO, MESSAGE, exception2));
@@ -86,7 +86,7 @@ class TestLogHandlerTest {
     }
 
     @Test void shouldFilterByLogLevelAndMessageAndThrowableClass() {
-        Throwable exception = new RuntimeException();
+        Throwable exception = /*~~(TODO: Use specific not RuntimeException. Suppress: // cui-rewrite:disable InvalidExceptionUsageRecipe)~~>*/new RuntimeException();
         Throwable exception2 = new IllegalArgumentException();
         underTest.publish(create(TestLogLevel.INFO, MESSAGE, exception));
         underTest.publish(create(TestLogLevel.INFO, MESSAGE, exception2));
