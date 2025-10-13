@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 
 class LogAssertsTest {
 
-    private final RuntimeException runtimeException = /*~~(TODO: Use specific not RuntimeException. Suppress: // cui-rewrite:disable InvalidExceptionUsageRecipe)~~>*/new RuntimeException();
+    private final IllegalStateException runtimeException = new IllegalStateException("Test exception for logging");
     private final IllegalArgumentException illegalArgumentException = new IllegalArgumentException();
 
     @BeforeAll static void beforeAll() {

@@ -77,7 +77,7 @@ class TestLogHandlerTest {
     }
 
     @Test void shouldFilterByLogLevelAndMessageAndThrowable() {
-        Throwable exception = /*~~(TODO: Use specific not RuntimeException. Suppress: // cui-rewrite:disable InvalidExceptionUsageRecipe)~~>*/new RuntimeException();
+        Throwable exception = new IllegalStateException("Test exception");
         Throwable exception2 = new IllegalArgumentException();
         underTest.publish(create(TestLogLevel.INFO, MESSAGE, exception));
         underTest.publish(create(TestLogLevel.INFO, MESSAGE, exception2));
@@ -86,7 +86,7 @@ class TestLogHandlerTest {
     }
 
     @Test void shouldFilterByLogLevelAndMessageAndThrowableClass() {
-        Throwable exception = /*~~(TODO: Use specific not RuntimeException. Suppress: // cui-rewrite:disable InvalidExceptionUsageRecipe)~~>*/new RuntimeException();
+        Throwable exception = new IllegalStateException("Test exception");
         Throwable exception2 = new IllegalArgumentException();
         underTest.publish(create(TestLogLevel.INFO, MESSAGE, exception));
         underTest.publish(create(TestLogLevel.INFO, MESSAGE, exception2));
