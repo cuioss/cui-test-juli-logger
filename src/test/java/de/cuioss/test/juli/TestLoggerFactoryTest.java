@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test;
 
 class TestLoggerFactoryTest {
 
-    /** . */
     private static final String SOME_LOGGER = "some.logger";
 
     @Test
