@@ -2,7 +2,7 @@ name: cui-test-juli-logger
 description: Provides some classes simplifying the configuration and asserting of java.util.logging
 
 release:
-  current-version: 2.1.1
+  current-version: 2.1.2
   next-version: 2.2-SNAPSHOT
   create-github-release: true
 
