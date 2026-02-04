@@ -39,7 +39,8 @@ import org.junit.jupiter.api.extension.ExtensionContext;
  */
 public class TestLoggerController implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback {
 
-    @Override public void beforeEach(ExtensionContext context) {
+    @Override
+    public void beforeEach(ExtensionContext context) {
         TestLoggerFactory.configureLogger();
         TestLoggerFactory.getTestHandler().clearRecords();
 
@@ -52,11 +53,13 @@ public class TestLoggerController implements BeforeAllCallback, AfterAllCallback
         }
     }
 
-    @Override public void afterAll(ExtensionContext context) {
+    @Override
+    public void afterAll(ExtensionContext context) {
         TestLoggerFactory.uninstall();
     }
 
-    @Override public void beforeAll(ExtensionContext context) {
+    @Override
+    public void beforeAll(ExtensionContext context) {
         TestLoggerFactory.install();
     }
 
