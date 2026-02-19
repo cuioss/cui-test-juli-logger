@@ -25,3 +25,12 @@ pages:
 
 github-automation:
   auto-merge-build-versions: true
+
+consumers:
+  - cuioss-parent-pom:version.cui.test.juli.logger
+  - nifi-extensions:version.cui.test.juli.logger
+
+dependency-propagation:
+  group-id: de.cuioss.test
+  artifact-id: cui-test-juli-logger
+  scope: dependency
