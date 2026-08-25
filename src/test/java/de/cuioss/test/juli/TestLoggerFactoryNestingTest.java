@@ -19,7 +19,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.logging.Logger;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -34,6 +38,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @DisplayName("TestLoggerFactory install/uninstall nesting")
 class TestLoggerFactoryNestingTest {
+
+    private static final String SOME_LOGGER = "some.nesting.logger";
+    private static final String MESSAGE = "captured before the inner uninstall";
 
     @AfterEach
     void tearDown() {
@@ -61,18 +68,26 @@ class TestLoggerFactoryNestingTest {
     @Test
     @DisplayName("records survive an inner uninstall")
     void recordsSurviveInnerUninstall() {
-        TestLoggerFactory.install();
-        TestLoggerFactory.install();
-        TestLoggerFactory.uninstall();
+        TestLoggerFactory.install();   // enclosing class: beforeAll
+        TestLoggerFactory.install();   // nested class: beforeAll
+        var handlerBefore = TestLoggerFactory.getTestHandler();
 
-        // Reinstalling must not swap in a fresh handler and drop what was captured.
-        var handler = TestLoggerFactory.getTestHandler();
-        TestLoggerFactory.install();
-        assertTrue(handler == TestLoggerFactory.getTestHandler(),
-                "re-entrant install must keep the existing handler instance");
+        TestLogLevel.INFO.setAsRootLevel();
+        Logger.getLogger(SOME_LOGGER).info(MESSAGE);
+        assertEquals(1, handlerBefore.resolveLogMessages(TestLogLevel.INFO, MESSAGE).size(),
+                "precondition: the record has to be captured in the first place");
 
-        TestLoggerFactory.uninstall();
-        TestLoggerFactory.uninstall();
+        TestLoggerFactory.uninstall(); // nested class: afterAll
+
+        // The handler has to be the same instance AND still hold what it captured - keeping
+        // the instance but dropping its records would fail every assertion made afterwards.
+        assertSame(handlerBefore, TestLoggerFactory.getTestHandler(),
+                "an inner uninstall must keep the existing handler instance");
+        assertEquals(1, TestLoggerFactory.getTestHandler()
+                        .resolveLogMessages(TestLogLevel.INFO, MESSAGE).size(),
+                "records captured before an inner uninstall must survive it");
+
+        TestLoggerFactory.uninstall(); // enclosing class: afterAll
     }
 
     @Test

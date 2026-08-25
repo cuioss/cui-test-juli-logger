@@ -59,7 +59,9 @@ public class TestLoggerFactory {
 
     /**
      * Adds a {@link TestLogHandler} instance to jul's root logger. This method is
-     * reentrant, it ensures the {@link TestLogHandler} is installed only once
+     * reentrant: the handler is added only once, and repeated calls keep the existing
+     * instance and increment an installation depth. Each call must be matched by an
+     * {@link #uninstall()}; only the outermost one removes the handler.
      */
     public static void install() {
         installDepth++;
@@ -70,8 +72,11 @@ public class TestLoggerFactory {
     }
 
     /**
-     * Removes previously installed {@link TestLogHandler} instance and restores the
-     * previously stored {@link ConsoleHandler#getLevel()}. See also
+     * Decrements the installation depth and, <em>only when it reaches zero</em>, removes
+     * the previously installed {@link TestLogHandler} instance and restores the previously
+     * stored {@link ConsoleHandler#getLevel()}. While an enclosing {@link #install()} is
+     * still outstanding this call is a no-op, so the handler and everything it has captured
+     * survive. A call without a matching {@link #install()} is harmless. See also
      * {@link #install()}.
      */
     public static void uninstall() {
