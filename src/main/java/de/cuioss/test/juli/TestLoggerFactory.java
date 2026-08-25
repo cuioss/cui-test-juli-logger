@@ -46,10 +46,23 @@ public class TestLoggerFactory {
     private static final ConsoleHandlerModifier CONSOLE_HANDLER = new ConsoleHandlerModifier();
 
     /**
+     * Number of {@link #install()} calls not yet matched by an {@link #uninstall()}.
+     * <p>
+     * The JUnit 5 controller installs in {@code BeforeAllCallback} and uninstalls in
+     * {@code AfterAllCallback}, and those fire once per <em>container</em>. A test class
+     * with {@code @Nested} classes therefore produces nested, not sequential, calls: the
+     * enclosing class installs, each nested class installs and uninstalls, and the
+     * enclosing class uninstalls last. Removing the handler on the first inner
+     * {@code uninstall()} would leave the remaining containers recording into nothing.
+     */
+    private static int installDepth;
+
+    /**
      * Adds a {@link TestLogHandler} instance to jul's root logger. This method is
      * reentrant, it ensures the {@link TestLogHandler} is installed only once
      */
     public static void install() {
+        installDepth++;
         if (getTestHandlerOption().isEmpty()) {
             CONSOLE_HANDLER.saveLevel();
             getRootLogger().addHandler(new TestLogHandler());
@@ -62,6 +75,13 @@ public class TestLoggerFactory {
      * {@link #install()}.
      */
     public static void uninstall() {
+        if (installDepth > 0) {
+            installDepth--;
+        }
+        if (installDepth > 0) {
+            // An enclosing container is still running - keep the handler and its records.
+            return;
+        }
         CONSOLE_HANDLER.restoreLevel();
         var testHandlerOption = getTestHandlerOption();
         testHandlerOption.ifPresent(testLogHandler -> getRootLogger().removeHandler(testLogHandler));

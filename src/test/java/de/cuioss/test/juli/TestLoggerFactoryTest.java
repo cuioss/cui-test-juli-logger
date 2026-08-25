@@ -34,12 +34,17 @@ class TestLoggerFactoryTest {
         assertFalse(TestLoggerFactory.getTestHandlerOption().isPresent());
         TestLoggerFactory.install();
         assertTrue(TestLoggerFactory.getTestHandlerOption().isPresent());
-        // Install should be reentrant
+        // Install is reentrant: the handler is added only once
         TestLoggerFactory.install();
+        assertTrue(TestLoggerFactory.getTestHandlerOption().isPresent());
+        // ... but each install has to be matched. The controller installs per
+        // container, so @Nested classes nest these calls rather than sequence them,
+        // and the handler must survive until the outermost uninstall.
+        TestLoggerFactory.uninstall();
         assertTrue(TestLoggerFactory.getTestHandlerOption().isPresent());
         TestLoggerFactory.uninstall();
         assertFalse(TestLoggerFactory.getTestHandlerOption().isPresent());
-        // Uninstall should be reentrant
+        // A surplus uninstall is harmless
         TestLoggerFactory.uninstall();
         assertFalse(TestLoggerFactory.getTestHandlerOption().isPresent());
     }
