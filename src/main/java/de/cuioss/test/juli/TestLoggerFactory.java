@@ -24,6 +24,8 @@ import java.util.Optional;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.LogManager;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 
@@ -56,6 +58,19 @@ public class TestLoggerFactory {
      * {@code uninstall()} would leave the remaining containers recording into nothing.
      */
     private static int installDepth;
+
+    /**
+     * Strong references to every {@link Logger} this factory has configured.
+     * <p>
+     * {@link java.util.logging.LogManager} holds its loggers <em>weakly</em>. Setting a level
+     * on a logger nobody else references therefore survives only until the next GC: the
+     * logger is collected and the next {@code Logger.getLogger(sameName)} returns a fresh
+     * instance with a {@code null} level, so everything the level enabled is filtered out
+     * before reaching a handler. That reads like a capture failure, not a configuration one,
+     * and because it depends on GC timing it shows up as an unreproducible CI-only flake.
+     * Pinning the loggers here keeps the configuration alive.
+     */
+    private static final Set<Logger> CONFIGURED_LOGGERS = ConcurrentHashMap.newKeySet();
 
     /**
      * Adds a {@link TestLogHandler} instance to jul's root logger. This method is
@@ -150,8 +165,18 @@ public class TestLoggerFactory {
     public static void addLogger(TestLogLevel logLevel, String loggerName) {
         CONSOLE_HANDLER.adjustLevel(logLevel);
         if (isEmpty(loggerName)) {
-            Logger.getLogger("").setLevel(logLevel.getJuliLevel());
+            configure("", logLevel);
         }
-        Logger.getLogger(loggerName).setLevel(logLevel.getJuliLevel());
+        configure(loggerName, logLevel);
+    }
+
+    /**
+     * Sets the level and keeps a strong reference, so the configuration cannot be lost to a
+     * garbage collection of the weakly held {@link Logger}. See {@link #CONFIGURED_LOGGERS}.
+     */
+    private static void configure(String loggerName, TestLogLevel logLevel) {
+        var logger = Logger.getLogger(loggerName);
+        logger.setLevel(logLevel.getJuliLevel());
+        CONFIGURED_LOGGERS.add(logger);
     }
 }
