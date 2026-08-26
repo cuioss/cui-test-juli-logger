@@ -2,7 +2,7 @@
 name: release
 description: Cut a cui-test-juli-logger release — bump .github/project.yml version, open and merge the release PR, wait for the automated Release workflow, verify the release landed, then reformat the generated GitHub release notes
 user-invocable: true
-allowed-tools: Bash, Read, Edit
+allowed-tools: Bash, Read, Edit, AskUserQuestion
 ---
 
 # Release Skill
@@ -118,7 +118,11 @@ dynamic endpoints — there is **no** per-release badge to hand-edit.
 git add .github/project.yml
 git commit -m "chore(release): prepare release <version>"
 git push -u origin chore/release_<version>
-gh label create skip-bot-review --repo cuioss/cui-test-juli-logger --description "Skip automated bot review" --color ededed 2>/dev/null || true
+# Create the label only when missing, and let a real failure (permissions, outage)
+# surface - swallowing it would make `gh pr create --label` fail with a confusing error.
+if ! gh label list --repo cuioss/cui-test-juli-logger --search skip-bot-review --json name --jq '.[].name' | grep -qx skip-bot-review; then
+  gh label create skip-bot-review --repo cuioss/cui-test-juli-logger --description "Skip automated bot review" --color ededed
+fi
 gh pr create --repo cuioss/cui-test-juli-logger --base main \
   --title "chore(release): prepare release <version>" \
   --label "skip-bot-review" \
@@ -142,20 +146,26 @@ gh pr checks <pr#> --repo cuioss/cui-test-juli-logger --watch
 
 - If a check fails, read the failing run's log (`gh run view <id> --log-failed`), fix the
   cause on the branch, push, and re-wait. **Never** merge a red PR.
-- Follow the PR-comment protocol in `CLAUDE.md`: fetch with
-  `gh api repos/cuioss/cui-test-juli-logger/pulls/<pr#>/comments`; every comment MUST get a
-  reply and MUST be resolved — fix it and say so, or explain why not. Ask the user when
-  uncertain.
+- Follow the PR-comment protocol in `CLAUDE.md`; every comment MUST get a reply and MUST be
+  resolved — fix it and say so, or explain why not. Ask the user when uncertain. Enumerate
+  **all** comments, not just the first page:
+  ```bash
+  gh api --paginate repos/cuioss/cui-test-juli-logger/pulls/<pr#>/comments
+  ```
+  A single unhandled comment beyond the first page still blocks the merge, so never work
+  from a truncated list.
 - **Unresolved review threads block the merge.** A PR can show every check green and still
   report `BLOCKED` purely because a bot review thread is open; resolving the threads clears
   it. Do not misread that state as a branch-protection or approval problem. Resolve with:
   ```bash
   gh api graphql -f query='mutation{resolveReviewThread(input:{threadId:"<id>"}){thread{isResolved}}}'
   ```
-  Thread ids come from:
+  Thread ids come from (paginate until `hasNextPage` is false — do not assume one page
+  covers every thread):
   ```bash
-  gh api graphql -f query='query{repository(owner:"cuioss",name:"cui-test-juli-logger"){pullRequest(number:<pr#>){reviewThreads(first:20){nodes{id isResolved}}}}}'
+  gh api graphql --paginate -f query='query($endCursor:String){repository(owner:"cuioss",name:"cui-test-juli-logger"){pullRequest(number:<pr#>){reviewThreads(first:100,after:$endCursor){pageInfo{hasNextPage endCursor} nodes{id isResolved}}}}}'
   ```
+  Before merging, assert the unresolved count is zero rather than eyeballing the list.
 - Re-run Step 7 after any push.
 
 ### Step 9 — Merge → release starts automatically
