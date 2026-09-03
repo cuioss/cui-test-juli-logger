@@ -56,24 +56,27 @@ release before the wider org picks the change up.
 
 ### Step 1 — Determine the version number
 
-Read the current release block in `.github/project.yml`:
-- `release.current-version` (e.g. `2.1.2`) — the **last released** version.
-- `release.next-version` (e.g. `2.2-SNAPSHOT`) — the version `pom.xml` carries between
-  releases.
+`.github/project.yml` is the single source of truth for both versions — read it, never
+assume:
 
-**Default rule:** the release version is `next-version` with `-SNAPSHOT` stripped
-(e.g. `2.2-SNAPSHOT` → `2.2`). The new `next-version` is the next minor bump plus
-`-SNAPSHOT` (e.g. `2.3-SNAPSHOT`).
+```bash
+grep -E 'current-version|next-version' .github/project.yml
+```
 
-This project has shipped both shapes — two-segment minors (`2.2`) and three-segment
-patches (`2.1.0` → `2.1.1` → `2.1.2`) off the same minor floor. For a **patch** release,
-`current-version` gains a patch segment (`2.1.2` → `2.1.3`) and `next-version` is left
-**unchanged**. Mirror the existing scheme rather than forcing a `.0`.
+- `release.current-version` — the **last released** version.
+- `release.next-version` — what `pom.xml` carries between releases.
+
+**Default rule:** the release version is `next-version` with `-SNAPSHOT` stripped. The new
+`next-version` is the next minor bump plus `-SNAPSHOT`.
+
+This project has shipped both shapes — two-segment minors and three-segment patches off the
+same minor floor. For a **patch** release, `current-version` gains a patch segment and
+`next-version` is left **unchanged**. Mirror the existing scheme rather than forcing a `.0`.
 
 **Ask the user** (AskUserQuestion) when the choice is genuinely open — e.g. `current-version`
-does not sit on the `next-version` line (as with `2.1.2` against `2.2-SNAPSHOT`, where both
-`2.2` and `2.1.3` are defensible), or the numbers look inconsistent. Otherwise state the
-determined version and proceed.
+does not sit on the `next-version` line, so both the stripped `next-version` and the
+incremented `current-version` are defensible, or the numbers look inconsistent. Otherwise
+state the determined version and proceed.
 
 ### Step 2 — Check for open PRs
 
@@ -99,14 +102,14 @@ Branch name uses the `chore/` prefix (required — the Maven CI workflow only tr
 the `build` check and block the merge):
 
 ```bash
-git checkout -b chore/release_<version>   # e.g. chore/release_2.2
+git checkout -b chore/release_<version>
 ```
 
 ### Step 5 — Update `.github/project.yml`
 
 Edit the `release` block:
-- `current-version:` → the version determined in Step 1 (e.g. `2.2`)
-- `next-version:` → next minor + `-SNAPSHOT` (e.g. `2.3-SNAPSHOT`); **leave unchanged** for
+- `current-version:` → the version determined in Step 1
+- `next-version:` → next minor + `-SNAPSHOT`; **leave unchanged** for
   a patch release.
 
 Leave everything else untouched. The README badges (CI, Maven Central, SonarCloud) are all
@@ -200,7 +203,7 @@ curl -sfI https://repo1.maven.org/maven2/de/cuioss/test/cui-test-juli-logger/<ve
 Confirm the tag exists, a GitHub release for `<version>` was created, and the artifact is
 resolvable from Maven Central (`200`).
 
-**Check `isDraft`.** A previous release (`2.1.2`) is still sitting as a **draft** — a draft
+**Check `isDraft`.** This repo has left a release sitting as a **draft** before — a draft
 release is not visible to consumers and means the workflow did not finish publishing.
 If `isDraft` is `true`, publish it (`gh release edit <version> --draft=false`) and
 investigate the Release workflow run before reporting success.
@@ -235,16 +238,53 @@ gh release edit <version> --repo cuioss/cui-test-juli-logger --notes-file .plan/
    - `### Java` — Java libraries (e.g. lombok, junit, cui-java-tools)
    - `### Infra` — platform/build/CI: build plugins, `cuioss-organization` workflow bumps,
      parent-POM / `cui-java-parent` updates
-4. **Collapse version chains** — when the same artifact is bumped multiple times
-   (`A → B → C`), keep only the **latest** entry spanning the full range.
-5. **Remove all OpenRewrite bumps and friends** — drop every `rewrite-maven-plugin`,
+4. **Collapse by library identity — one line per library, spanning the full range.**
+   The unit of collapsing is the *library*, not the PR title. Merge into a single line
+   whenever the PRs concern the same library, in all three shapes that occur:
+   - **Version chains** — several bumps of one artifact (`A → B → C`) collapse to one line
+     spanning `A → C`, carrying the latest PR's author.
+   - **The same library in several places** — one library bumped in more than one module or
+     directory is **one** line naming them all, not one line each. Those titles differ only
+     by that suffix, so do not wait for identical titles before merging.
+   - **One upstream release landing as several coordinates** — when a single upstream bump
+     arrives as separate PRs against different coordinates (e.g. a version property *and*
+     a BOM or parent), that is **one** bump: one line naming the coordinates in parentheses.
+
+   Carry every merged PR's URL onto the surviving line, comma-separated.
+5. **Recover versions the title omits.** Dependabot truncates a title to
+   `bump <lib> in /<dir>`, with no versions, when several dependencies must move together.
+   Never publish a dependency line without a version range: read the PR body, which states
+   ``Updates `<lib>` from X to Y``, and use those versions when computing the range:
+
+   ```bash
+   gh pr view <n> --repo cuioss/cui-test-juli-logger --json body --jq .body | head -6
+   ```
+6. **Remove all OpenRewrite bumps and friends** — drop every `rewrite-maven-plugin`,
    `rewrite-migrate-java`, `rewrite-testing-frameworks`, and related OpenRewrite dependency PR.
-6. **Remove internal tooling churn** — drop PRs that only touch dev/build orchestration with
+7. **Remove internal tooling churn** — drop PRs that only touch dev/build orchestration with
    no user-facing effect: `marshal.json`/plan-marshall config migrations, plan-marshall build
    wiring, internal dev-skill changes, and the mechanical version-bump PR itself.
-7. Preserve each kept PR line verbatim (`* <title> by @author in <url>`); when two PRs share
-   an identical title, merge them onto one line with both URLs.
-8. Keep the trailing `**Full Changelog**: ...compare/<prev>...<version>` line.
+8. **Preserve each kept PR line** in its original
+   `* <title> by @author in <url>` shape. Rules 4 and 5 **override** verbatimness where
+   they conflict: rewrite the title's version range to span the collapsed chain, and name
+   the several modules or coordinates on the surviving line.
+9. Keep the trailing `**Full Changelog**: ...compare/<prev>...<version>` line.
+
+#### Verify before publishing (mandatory)
+
+These rules are easy to under-apply: a duplicate survives whenever two PRs touch the same
+library under differing titles. After building the notes file and **before**
+`gh release edit`, assert that every library appears exactly once:
+
+```bash
+grep -oE '(bump|update) [^ ]+ (from|in)' .plan/temp/release-<version>.md \
+  | sort | uniq -c | sort -rn | head
+```
+
+Every count must be `1`. Any count `>1` is an unmerged duplicate — collapse it per rule
+4 and re-run. Also confirm that no dependency line is missing a version range
+(rule 5).
+
 
 ### Step 13 — Done
 
