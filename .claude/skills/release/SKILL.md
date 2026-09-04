@@ -134,8 +134,6 @@ gh pr create --repo cuioss/cui-test-juli-logger --base main \
 
 The mechanical release PR carries the `skip-bot-review` label to skip automated bot review.
 
-Use the project commit convention: `Co-Authored-By: Claude <noreply@anthropic.com>` (no
-model name / no "Generated with Claude Code" footer).
 
 ### Step 7 — Wait for PR checks (~4–7 min)
 
@@ -302,4 +300,3 @@ will appear in `cuioss-parent-pom` and `nifi-extensions`.
 - Every review comment gets a reply **and** gets resolved — unresolved threads block the merge.
 - Verify the published release is **not a draft**.
 - Temporary files go under `.plan/temp/`.
-- Commit trailer: `Co-Authored-By: Claude <noreply@anthropic.com>`; no PR footer line.
